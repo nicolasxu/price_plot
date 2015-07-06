@@ -1,13 +1,12 @@
 package com.company;
 
-import com.opencsv.CSVReader;
+import javafx.scene.shape.Ellipse;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
@@ -19,12 +18,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Ellipse2D;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by nick on 7/1/15.
@@ -80,7 +78,7 @@ public class SampleForm extends ApplicationFrame {
     }
 
     private void readDataFileTo(ArrayList<Double> data) {
-        this.fileName = "tick50diff20150702.csv"; //"tick50diff.csv";
+        this.fileName = "tick50diff20150629.csv"; //"tick50diff.csv";
         String filePath = "/Users/nick/IdeaProjects/price_plot/";
 
         FileReader fr;
@@ -187,15 +185,17 @@ public class SampleForm extends ApplicationFrame {
             public Color getItemColor(int series, int item) {
                 // modify code here to change color for different part of the line in one serie line
                 if(series == 1) {
-                    System.out.println("getting color at: " + item);
+
                     int isBuy = 0;
                     if(item < kFilter.buySellSignal.size()) {
                         isBuy = kFilter.buySellSignal.get(item);
                     }
 
                     if(isBuy == 1) {
+                        System.out.println("item: " + item + " buySell: " + isBuy);
                         return Color.red;
                     } else {
+                        System.out.println("item: " + item + " buySell: " + isBuy);
                         return Color.green;
                     }
                 } else {
@@ -213,13 +213,26 @@ public class SampleForm extends ApplicationFrame {
                 //g2.setStroke(getItemStroke(series, item));
                 Color c1 = getItemColor(series, item - 1);
                 Color c2 = getItemColor(series, item);
-
-                GradientPaint linePaint = new GradientPaint(0, 0, c1, 0, 300, c2);
+                // color of the line is determined by the 1st point, c1
+                GradientPaint linePaint = new GradientPaint(0, 0, c1, 0, 0, c2);
                 g2.setPaint(linePaint);
                 g2.draw(shape);
             }
         };
 
+        // Customize point shape
+        Rectangle rect = new Rectangle();
+        Dimension dd = new Dimension();
+        dd.setSize(2, 2);
+        rect.setSize(dd);
+        renderer.setSeriesShape(1, rect);
+
+
+        Ellipse2D.Double ellipse = new Ellipse2D.Double(2,2,2,2);
+
+        renderer.setSeriesShape(0, ellipse);
+
+        // finaly, attach the renderer
         plot.setRenderer(renderer);
 
         return chart;
