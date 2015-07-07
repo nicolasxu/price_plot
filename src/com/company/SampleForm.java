@@ -78,7 +78,7 @@ public class SampleForm extends ApplicationFrame {
     }
 
     private void readDataFileTo(ArrayList<Double> data) {
-        this.fileName = "tick50diff20150629.csv"; //"tick50diff.csv";
+        this.fileName = "tick50diff20140723.csv"; //"tick50diff.csv";
         String filePath = "/Users/nick/IdeaProjects/price_plot/";
 
         FileReader fr;
@@ -222,13 +222,11 @@ public class SampleForm extends ApplicationFrame {
 
         // Customize point shape
         Rectangle rect = new Rectangle();
-        Dimension dd = new Dimension();
-        dd.setSize(2, 2);
-        rect.setSize(dd);
+        rect.setRect(-1,0,2,2); // cordiantes and dimension
         renderer.setSeriesShape(1, rect);
 
 
-        Ellipse2D.Double ellipse = new Ellipse2D.Double(2,2,2,2);
+        Ellipse2D.Double ellipse = new Ellipse2D.Double(-1,0,2,2);
 
         renderer.setSeriesShape(0, ellipse);
 
