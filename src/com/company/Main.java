@@ -4,6 +4,7 @@ package com.company;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Main {
 
@@ -129,22 +130,17 @@ public class Main {
             input.add(closePrice[i]);
         }
 
-        // init Kalman filter
+        // init Laguerre Filter
+        ALF_2 laguerreFilter = new ALF_2(10);
+        ArrayList<Double> laguerreOutput = new ArrayList<Double>();
+        laguerreFilter.filter(input, laguerreOutput);
 
-        IFilter kalmanFilter = new KalmanFilter(1);
-        ArrayList<Double> output = new ArrayList<Double>();
-
-        kalmanFilter.filter(input, output);
-
-        /* test code
-        for(int i =0; i < output.size(); i++) {
-            System.out.println("output[" +i+"]=" + output.get(i));
+        /*
+        System.out.println("laguerreOutput");
+        for(double value: laguerreOutput) {
+            System.out.println(value);
         }
         */
-
-
-
-
 
 
         // end of test

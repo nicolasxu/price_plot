@@ -1,11 +1,13 @@
 package com.company;
 
+
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+
 /**
- * Created by nick on 7/2/15.
+ * Created by nick on 7/8/15.
  */
 public class KalmanFilter extends IFilter {
 
@@ -36,9 +38,7 @@ public class KalmanFilter extends IFilter {
         this.sqrtK100 = Math.sqrt(this.smoothRatio/100.0);
         this.k100 = this.smoothRatio/100.0;
         this.buySellSignal = new ArrayList<Integer>();
-        System.out.println("smoothRatio: " + this.smoothRatio);
-        System.out.println("k100: " + k100);
-        System.out.println("sqrtK100: " + sqrtK100);
+
 
 
     }
@@ -51,7 +51,7 @@ public class KalmanFilter extends IFilter {
 
 
     public void filter(ArrayList<Double> input, ArrayList<Double> output) {
-
+        System.out.println("filter() triggered");
         if(input.size() < this.min_rates_total) {
             return;
         }
@@ -64,6 +64,7 @@ public class KalmanFilter extends IFilter {
             if(i < 1) {
                 Double inputNumber = input.get(i);
                 output.add(inputNumber);
+                buySellSignal.add(-1);
                 this.previousVelocity = 0.0;
                 this.velocity = this.previousVelocity;
 
@@ -77,30 +78,15 @@ public class KalmanFilter extends IFilter {
                 }
                 this.distance = input.get(i) - output.get(i - 1);
                 this.distance = Double.parseDouble(df.format(this.distance));
-                if(i < 4) {
-                    //System.out.println("distance["+i+"]=input.get(i) - output.get(i - 1) = "+ input.get(i) +" - "+ output.get(i - 1) );
-                    //System.out.println("distance["+i+"]=" + this.distance);
-                }
-                this.error    = output.get(i-1) + this.distance * this.sqrtK100;
-                if(i < 4) {
-                    //System.out.println("error["+i+"]=output.get( "+i+"-1) + this.distance * this.sqrtK100 =" + output.get(i-1)+ "+" + this.distance * this.sqrtK100);
-                    //System.out.println("error["+i+"]=" + this.error);
-                }
-                if(i < 4) {
-                    //System.out.println("velocity["+i+"]="+ this.velocity +" + " + this.distance*this.k100 );
 
-                }
+                this.error    = output.get(i-1) + this.distance * this.sqrtK100;
+
                 this.velocity = this.velocity + this.distance*this.k100;
                 this.previousVelocity = this.velocity;
-                if(i < 4) {
 
-                    //System.out.println("velocity["+i+"]="+ this.velocity);
-                }
                 double currentBarValue = this.error + this.velocity;
                 //currentBarValue = Double.parseDouble(df.format(currentBarValue));
-                if(i < 4) {
-                    //System.out.println("IndBuffer["+i+"]=" + currentBarValue);
-                }
+
 
                 if(i >= output.size()) {
                     output.add(currentBarValue);
@@ -121,6 +107,8 @@ public class KalmanFilter extends IFilter {
                         }
 
                     } else {
+
+
                         if(i >= buySellSignal.size()) {
                             // sell
                             buySellSignal.add(0);
@@ -128,7 +116,7 @@ public class KalmanFilter extends IFilter {
                             buySellSignal.set(i, 0);
                         }
                     }
-
+                    //System.out.println("kalman signal["+i+"] = " + this.buySellSignal.get(i));
                 } else {
                     // Trend signal
                     if(output.get(i -1 ) > output.get(i)) {
@@ -149,4 +137,77 @@ public class KalmanFilter extends IFilter {
             }
         }
     }
+
+    public void calculateWinLoss(ArrayList<Double> input, ArrayList<Double> output, ArrayList<Integer> signal) {
+        int total = input.size();
+        int currentSignal;
+        int previousSignal;
+        boolean bought = false;
+        boolean sold = false;
+        double boughtPrice = 0.0;
+        double soldPrice = 0.0;
+        int winCount = 0;
+        int lossCount = 0;
+        double profitSize = 50 * 0.00001; // 50 points
+
+
+        for(int i = 0; i < total; i++) {
+
+            currentSignal = signal.get(i);
+            if(i -1 < 0) {
+                previousSignal = signal.get(0);
+            } else {
+                previousSignal = signal.get(i - 1);
+            }
+
+            // trend reverse
+            if(currentSignal == 1 && previousSignal == 0) {
+                if(sold) {
+                    sold = false;
+                    lossCount++;
+                }
+                bought = true;
+                boughtPrice = input.get(i);
+            }
+
+            if(currentSignal == 0 && previousSignal == 1) {
+                if(bought) {
+                    bought = false;
+                    lossCount++;
+                }
+                sold = true;
+                soldPrice = input.get(i);
+            }
+
+            // trend continue
+            if(currentSignal ==1 && previousSignal ==1) {
+                // buy trend continue
+                double currentPrice = input.get(i);
+                if(bought) {
+                    if (currentPrice - boughtPrice >= profitSize) {
+                        winCount++;
+                        bought = false;
+                    }
+                }
+
+            }
+
+            if(currentSignal == 0 && previousSignal == 0) {
+                // sell trend continue
+                double currentPrice = input.get(i);
+                if(sold) {
+                    if(soldPrice - currentPrice >= profitSize) {
+                        winCount++;
+                        sold = false;
+
+                    }
+                }
+            }
+        }
+        System.out.println("P&L with Kalman("+ this.smoothRatio  +")");
+        System.out.println("Kalman Win Count: " + winCount);
+        System.out.println("Kalman Lose Count: " + lossCount);
+
+    }
 }
+

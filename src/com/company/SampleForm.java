@@ -1,6 +1,6 @@
 package com.company;
 
-import javafx.scene.shape.Ellipse;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -32,13 +32,11 @@ public class SampleForm extends ApplicationFrame {
     private JPanel rootPanel;
     String fileName;
     public KalmanFilter kFilter;
+    public ALF_2 laguerreFilter;
 
     public SampleForm() {
 
         super("Hello World");
-
-
-
 
         // 1. create data collection
         XYDataset dataCollection = createDataCollection();
@@ -78,7 +76,7 @@ public class SampleForm extends ApplicationFrame {
     }
 
     private void readDataFileTo(ArrayList<Double> data) {
-        this.fileName = "tick50diff20150708.csv"; //"tick50diff.csv";
+        this.fileName = "tick50diff20150629.csv"; //"tick50diff.csv";
         String filePath = "/Users/nick/IdeaProjects/price_plot/";
 
         FileReader fr;
@@ -92,10 +90,18 @@ public class SampleForm extends ApplicationFrame {
 
 
                 String[] columns = line.split(",");
+                double bid, ask, mid;
 
-                double bid = Double.parseDouble(columns[0]);
-                double ask = Double.parseDouble(columns[1]);
-                double mid = (bid + ask) / 2;
+                if(this.fileName.contains("IB")) {
+                    bid = Double.parseDouble(columns[1]);
+                    ask = Double.parseDouble(columns[2]);
+                    mid = (bid + ask) / 2;
+                } else {
+                    bid = Double.parseDouble(columns[0]);
+                    ask = Double.parseDouble(columns[1]);
+                    mid = (bid + ask) / 2;
+                }
+
 
                 if(data == null) {
                     data = new ArrayList<Double>();
@@ -122,35 +128,49 @@ public class SampleForm extends ApplicationFrame {
 
     private XYDataset createDataCollection() {
 
+        // read data
         ArrayList<Double>  data = new ArrayList<Double>();
         this.readDataFileTo(data);
 
+        // series
         XYSeries priceSeries = new XYSeries("Price");
         XYSeries smoothedSeries = new XYSeries("Smoothed");
         XYSeries kalmanSeries = new XYSeries("Kalman");
+        XYSeries laguerreSeries = new XYSeries("Laguerre - not adaptive");
 
+        // Super Smooth filter
         ArrayList<Double> smoothedData = new ArrayList<Double>();
         SuperSmootherFilter ssFilter = new SuperSmootherFilter(5);
         ssFilter.filter(data, smoothedData);
 
+        // Kalman Filter
         ArrayList<Double> kalmanData = new ArrayList<Double>();
-        kFilter = new KalmanFilter(5);
+        kFilter = new KalmanFilter(5); // 5, 10
 
         kFilter.filter(data, kalmanData);
+        kFilter.calculateWinLoss(data, kalmanData, kFilter.buySellSignal);
+        System.out.println("input size: " + data.size() + " output size: " + kalmanData.size() + " signal size: " + kFilter.buySellSignal.size());
 
+        // Laguerre Filter
+        ArrayList<Double> laguerreData = new ArrayList<Double>();
+        laguerreFilter = new ALF_2(2); // 10
+        laguerreFilter.filter(data, laguerreData);
+        laguerreFilter.calculateWinLoss(data, laguerreData, laguerreFilter.buySellSignal);
 
-        System.out.println("smoothedData.size(): " + smoothedData.size());
+        // prepare series data for all filter series
         for(int i = 0; i < data.size(); i++) {
             priceSeries.add(i, data.get(i));
             smoothedSeries.add(i, smoothedData.get(i));
             kalmanSeries.add(i, kalmanData.get(i));
-            //System.out.println("smoothedData: " + smoothedData.get(i));
+            laguerreSeries.add(i, laguerreData.get(i));
+
         }
 
         XYSeriesCollection dataCollection = new XYSeriesCollection();
         dataCollection.addSeries(priceSeries);
         //dataCollection.addSeries(smoothedSeries);
-        dataCollection.addSeries(kalmanSeries);
+        //dataCollection.addSeries(kalmanSeries);
+        dataCollection.addSeries(laguerreSeries);
 
         return dataCollection;
     }
@@ -187,16 +207,33 @@ public class SampleForm extends ApplicationFrame {
                 if(series == 1) {
 
                     int isBuy = 0;
-                    if(item < kFilter.buySellSignal.size()) {
-                        isBuy = kFilter.buySellSignal.get(item);
+
+                    // use kalman signal
+//                    if(item < kFilter.buySellSignal.size()) {
+//                        isBuy = kFilter.buySellSignal.get(item);
+//                    }
+
+                    // use laguerre signal
+                    if(item < laguerreFilter.buySellSignal.size()) {
+                        isBuy = laguerreFilter.buySellSignal.get(item);
                     }
 
+
+
+                    //System.out.println("item: " + item + " buySell: " + isBuy);
                     if(isBuy == 1) {
-                        System.out.println("item: " + item + " buySell: " + isBuy);
+
                         return Color.red;
-                    } else {
-                        System.out.println("item: " + item + " buySell: " + isBuy);
+                    }
+                    if(isBuy == 0){
+
                         return Color.green;
+                    }
+                    if(isBuy == -1) {
+
+                        return Color.pink;
+                    } else {
+                        return Color.yellow;
                     }
                 } else {
                     return Color.yellow;
@@ -213,6 +250,7 @@ public class SampleForm extends ApplicationFrame {
                 //g2.setStroke(getItemStroke(series, item));
                 Color c1 = getItemColor(series, item - 1);
                 Color c2 = getItemColor(series, item);
+
                 // color of the line is determined by the 1st point, c1
                 GradientPaint linePaint = new GradientPaint(0, 0, c1, 0, 0, c2);
                 g2.setPaint(linePaint);
