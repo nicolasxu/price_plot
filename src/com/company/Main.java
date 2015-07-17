@@ -130,18 +130,13 @@ public class Main {
             input.add(closePrice[i]);
         }
 
-        // init Laguerre Filter
-        ALF_2 laguerreFilter = new ALF_2(10);
-        ArrayList<Double> laguerreOutput = new ArrayList<Double>();
-        laguerreFilter.filter(input, laguerreOutput);
+        MA_fn mafn = new MA_fn(4);
+        ArrayList<Double> output = new ArrayList<Double>();
+        mafn.filter(input, output);
 
-        /*
-        System.out.println("laguerreOutput");
-        for(double value: laguerreOutput) {
-            System.out.println(value);
+        for(Double value: output) {
+            //System.out.println(value);
         }
-        */
-
 
         // end of test
 

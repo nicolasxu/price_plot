@@ -1,5 +1,6 @@
 package com.company;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -45,7 +46,7 @@ public class ALF_2 extends IFilter {
         this.hh = 0;
         this.ll = 2;
 
-        this.length = length; // 10
+        this.length = length; // 2
 
         this.adaptBackLength = 2; // 5
 
@@ -216,6 +217,8 @@ public class ALF_2 extends IFilter {
         int winCount = 0;
         int lossCount = 0;
         double profitSize = 50 * 0.00001; // 50 points
+        ArrayList<Integer> winLossList = new ArrayList<Integer>();
+        ArrayList<Integer> winLossInputIndex = new ArrayList<Integer>();
 
 
         for(int i = 0; i < total; i++) {
@@ -232,6 +235,8 @@ public class ALF_2 extends IFilter {
                 if(sold) {
                     sold = false;
                     lossCount++;
+                    winLossList.add(0);
+                    winLossInputIndex.add(i);
                 }
                 bought = true;
                 boughtPrice = input.get(i);
@@ -241,6 +246,8 @@ public class ALF_2 extends IFilter {
                 if(bought) {
                     bought = false;
                     lossCount++;
+                    winLossList.add(0);
+                    winLossInputIndex.add(i);
                 }
                 sold = true;
                 soldPrice = input.get(i);
@@ -253,6 +260,8 @@ public class ALF_2 extends IFilter {
                 if(bought) {
                     if (currentPrice - boughtPrice >= profitSize) {
                         winCount++;
+                        winLossList.add(1);
+                        winLossInputIndex.add(i);
                         bought = false;
                     }
                 }
@@ -265,6 +274,8 @@ public class ALF_2 extends IFilter {
                 if(sold) {
                     if(soldPrice - currentPrice >= profitSize) {
                         winCount++;
+                        winLossList.add(1);
+                        winLossInputIndex.add(1);
                         sold = false;
 
                     }
@@ -272,8 +283,30 @@ public class ALF_2 extends IFilter {
             }
         }
         System.out.println("Laguerre P&L with Laguerre("+this.length+")");
-        System.out.println("Laguerre(not adaptive) Win Count: " + winCount);
-        System.out.println("Laguerre(not adaptive) Lose Count: " + lossCount);
+        System.out.println("Laguerre(adaptive) Win Count: " + winCount);
+        System.out.println("Laguerre(adaptive) Lose Count: " + lossCount);
+
+        System.out.println("----------------------------------------");
+        int tempWin = 0, tempLoss = 0;
+        int maxLossRow = 0, tempMaxLossRow = 0;
+        int maxLossRowPoint = 0;
+
+        for(int i = 0; i < winLossList.size(); i++) {
+            if(winLossList.get(i) == 0) {
+                tempLoss++;
+                tempMaxLossRow++;
+                if(tempMaxLossRow > maxLossRow) {
+                    maxLossRow = tempMaxLossRow;
+                    maxLossRowPoint = i;
+                }
+            } else {
+                tempWin++;
+                tempMaxLossRow = 0;
+            }
+            //System.out.println(i + " :" + winLossList.get(i));
+        }
+        System.out.println("tempwins: " + tempWin + " tempLoss: " + tempLoss);
+        System.out.println("Max loss in a row: " + maxLossRow + " end at: " + winLossInputIndex.get(maxLossRowPoint));
 
     }
 

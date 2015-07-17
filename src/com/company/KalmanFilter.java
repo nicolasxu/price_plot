@@ -150,6 +150,8 @@ public class KalmanFilter extends IFilter {
         int lossCount = 0;
         double profitSize = 50 * 0.00001; // 50 points
 
+        ArrayList<Integer> winLossList = new ArrayList<Integer>();
+
 
         for(int i = 0; i < total; i++) {
 
@@ -165,6 +167,7 @@ public class KalmanFilter extends IFilter {
                 if(sold) {
                     sold = false;
                     lossCount++;
+                    winLossList.add(0);
                 }
                 bought = true;
                 boughtPrice = input.get(i);
@@ -174,6 +177,7 @@ public class KalmanFilter extends IFilter {
                 if(bought) {
                     bought = false;
                     lossCount++;
+                    winLossList.add(0);
                 }
                 sold = true;
                 soldPrice = input.get(i);
@@ -186,6 +190,7 @@ public class KalmanFilter extends IFilter {
                 if(bought) {
                     if (currentPrice - boughtPrice >= profitSize) {
                         winCount++;
+                        winLossList.add(1);
                         bought = false;
                     }
                 }
@@ -198,6 +203,7 @@ public class KalmanFilter extends IFilter {
                 if(sold) {
                     if(soldPrice - currentPrice >= profitSize) {
                         winCount++;
+                        winLossList.add(1);
                         sold = false;
 
                     }
@@ -207,6 +213,25 @@ public class KalmanFilter extends IFilter {
         System.out.println("P&L with Kalman("+ this.smoothRatio  +")");
         System.out.println("Kalman Win Count: " + winCount);
         System.out.println("Kalman Lose Count: " + lossCount);
+        System.out.println("----------------------------------------");
+        int tempWin = 0, tempLoss = 0;
+        int maxLossRow = 0, tempMaxLossRow = 0;
+        int maxLossRowPoint = 0;
+        for(int i = 0; i < winLossList.size(); i++) {
+            if(winLossList.get(i) == 0) {
+                tempLoss++;
+                tempMaxLossRow++;
+                if(tempMaxLossRow > maxLossRow) {
+                    maxLossRow = tempMaxLossRow;
+                    maxLossRowPoint = i;
+                }
+            } else {
+                tempWin++;
+                tempMaxLossRow = 0;
+            }
+        }
+        System.out.println("tempwins: " + tempWin + " tempLoss: " + tempLoss);
+        System.out.println("Max loss in a row: " + maxLossRow + " ends at: " + maxLossRowPoint);
 
     }
 }

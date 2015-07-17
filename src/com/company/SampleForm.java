@@ -22,6 +22,7 @@ import java.awt.geom.Ellipse2D;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -33,6 +34,7 @@ public class SampleForm extends ApplicationFrame {
     String fileName;
     public KalmanFilter kFilter;
     public ALF_2 laguerreFilter;
+    public MA_fn mafnFilter;
 
     public SampleForm() {
 
@@ -76,7 +78,7 @@ public class SampleForm extends ApplicationFrame {
     }
 
     private void readDataFileTo(ArrayList<Double> data) {
-        this.fileName = "tick50diff20150629.csv"; //"tick50diff.csv";
+        this.fileName = "tick50diff201501.csv"; //"tick50diff.csv";
         String filePath = "/Users/nick/IdeaProjects/price_plot/";
 
         FileReader fr;
@@ -137,25 +139,44 @@ public class SampleForm extends ApplicationFrame {
         XYSeries smoothedSeries = new XYSeries("Smoothed");
         XYSeries kalmanSeries = new XYSeries("Kalman");
         XYSeries laguerreSeries = new XYSeries("Laguerre - not adaptive");
+        XYSeries mafnSeries = new XYSeries("Moving Average FN");
+
+        // Fisher filter
+        ArrayList<Double> fisherData = new ArrayList<Double>();
+        ArrayList<Double> fisherTrigger = new ArrayList<Double>();
+        FisherFilter fisherFilter = new FisherFilter(15);
+        fisherFilter.filter(data, fisherData, fisherTrigger);
+        fisherFilter.calculateWinLoss(data, fisherData, fisherFilter.buySellSignal);
+
 
         // Super Smooth filter
         ArrayList<Double> smoothedData = new ArrayList<Double>();
-        SuperSmootherFilter ssFilter = new SuperSmootherFilter(5);
+        SuperSmootherFilter ssFilter = new SuperSmootherFilter(3); // 14
         ssFilter.filter(data, smoothedData);
+        //ssFilter.calculateWinLoss(data, smoothedData, ssFilter.buySellSignal);
 
         // Kalman Filter
         ArrayList<Double> kalmanData = new ArrayList<Double>();
-        kFilter = new KalmanFilter(5); // 5, 10
+        kFilter = new KalmanFilter(1); // 5, 10
 
         kFilter.filter(data, kalmanData);
-        kFilter.calculateWinLoss(data, kalmanData, kFilter.buySellSignal);
+        //kFilter.calculateWinLoss(data, kalmanData, kFilter.buySellSignal);
         System.out.println("input size: " + data.size() + " output size: " + kalmanData.size() + " signal size: " + kFilter.buySellSignal.size());
 
         // Laguerre Filter
         ArrayList<Double> laguerreData = new ArrayList<Double>();
         laguerreFilter = new ALF_2(2); // 10
         laguerreFilter.filter(data, laguerreData);
-        laguerreFilter.calculateWinLoss(data, laguerreData, laguerreFilter.buySellSignal);
+        //laguerreFilter.calculateWinLoss(data, laguerreData, laguerreFilter.buySellSignal);
+
+        // MA_fn Filter
+        ArrayList<Double> mafnData = new ArrayList<Double>();
+        mafnFilter = new MA_fn(10); // must be 4 for now
+        mafnFilter.filter(data, mafnData);
+        //mafnFilter.calculateWinLoss(data, mafnData, mafnFilter.buySellSignal);
+
+
+
 
         // prepare series data for all filter series
         for(int i = 0; i < data.size(); i++) {
@@ -163,6 +184,7 @@ public class SampleForm extends ApplicationFrame {
             smoothedSeries.add(i, smoothedData.get(i));
             kalmanSeries.add(i, kalmanData.get(i));
             laguerreSeries.add(i, laguerreData.get(i));
+            mafnSeries.add(i, mafnData.get(i));
 
         }
 
@@ -170,7 +192,8 @@ public class SampleForm extends ApplicationFrame {
         dataCollection.addSeries(priceSeries);
         //dataCollection.addSeries(smoothedSeries);
         //dataCollection.addSeries(kalmanSeries);
-        dataCollection.addSeries(laguerreSeries);
+        //dataCollection.addSeries(laguerreSeries);
+        dataCollection.addSeries(mafnSeries);
 
         return dataCollection;
     }
@@ -214,8 +237,8 @@ public class SampleForm extends ApplicationFrame {
 //                    }
 
                     // use laguerre signal
-                    if(item < laguerreFilter.buySellSignal.size()) {
-                        isBuy = laguerreFilter.buySellSignal.get(item);
+                    if(item < mafnFilter.buySellSignal.size()) {
+                        isBuy = mafnFilter.buySellSignal.get(item);
                     }
 
 
