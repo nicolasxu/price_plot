@@ -2,20 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5fc010e3-4e71-4661-8cb8-718491c97acf" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/company/FisherFilter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/company/MA_fn.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/price_plot/com/company/ALF_2.class" afterPath="$PROJECT_DIR$/out/production/price_plot/com/company/ALF_2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/price_plot/com/company/KalmanFilter.class" afterPath="$PROJECT_DIR$/out/production/price_plot/com/company/KalmanFilter.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/company/FATL.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/company/FATL2StepFilter.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/company/NoFilter.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/company/SATL.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/company/StepFilter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/price_plot/com/company/Main.class" afterPath="$PROJECT_DIR$/out/production/price_plot/com/company/Main.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/price_plot/com/company/SampleForm$1.class" afterPath="$PROJECT_DIR$/out/production/price_plot/com/company/SampleForm$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/price_plot/com/company/SampleForm$2.class" afterPath="$PROJECT_DIR$/out/production/price_plot/com/company/SampleForm$2.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/price_plot/com/company/SampleForm.class" afterPath="$PROJECT_DIR$/out/production/price_plot/com/company/SampleForm.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/price_plot/com/company/SuperSmootherFilter.class" afterPath="$PROJECT_DIR$/out/production/price_plot/com/company/SuperSmootherFilter.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/company/ALF_2.java" afterPath="$PROJECT_DIR$/src/com/company/ALF_2.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/company/KalmanFilter.java" afterPath="$PROJECT_DIR$/src/com/company/KalmanFilter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/company/Main.java" afterPath="$PROJECT_DIR$/src/com/company/Main.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/company/SampleForm.java" afterPath="$PROJECT_DIR$/src/com/company/SampleForm.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/company/SuperSmootherFilter.java" afterPath="$PROJECT_DIR$/src/com/company/SuperSmootherFilter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="price_plot.iws" />
@@ -42,101 +39,67 @@
         <entry file="file://$PROJECT_DIR$/src/com/company/Main.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="16" column="8" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
+              <caret line="137" column="14" selection-start-line="137" selection-start-column="14" selection-end-line="137" selection-end-column="14" />
               <folding>
-                <element signature="e#3566#3574#0" expanded="true" />
-                <element signature="e#3750#3758#0" expanded="true" />
+                <element signature="e#3767#3775#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SampleForm.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SampleForm.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/company/SampleForm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.41105768">
-              <caret line="180" column="52" selection-start-line="180" selection-start-column="52" selection-end-line="180" selection-end-column="52" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="207" column="30" selection-start-line="207" selection-start-column="30" selection-end-line="207" selection-end-column="30" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#4154#4162#0" expanded="true" />
-                <element signature="e#4221#4229#0" expanded="true" />
-                <element signature="e#4525#4533#0" expanded="true" />
-                <element signature="e#4814#4822#0" expanded="true" />
-                <element signature="e#5223#5231#0" expanded="true" />
-                <element signature="e#5499#5507#0" expanded="true" />
+                <element signature="e#4542#4550#0" expanded="true" />
+                <element signature="e#7178#7186#0" expanded="true" />
+                <element signature="e#7469#7477#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FisherFilter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/company/FisherFilter.java">
+      <file leaf-file-name="NoFilter.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/company/NoFilter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="205" column="34" selection-start-line="205" selection-start-column="34" selection-end-line="205" selection-end-column="34" />
+            <state vertical-scroll-proportion="-0.6863905">
+              <caret line="132" column="27" selection-start-line="132" selection-start-column="27" selection-end-line="132" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#4530#4531#0" expanded="true" />
-                <element signature="e#4561#4562#0" expanded="true" />
-                <element signature="e#5120#5129#0" expanded="true" />
-                <element signature="e#5193#5202#0" expanded="true" />
+                <element signature="method#filter#0;class#NoFilter#0" expanded="false" />
+                <element signature="e#1621#1630#0" expanded="true" />
+                <element signature="e#3771#3789#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SuperSmootherFilter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/company/SuperSmootherFilter.java">
+      <file leaf-file-name="FATL.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/company/FATL.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="69" column="4" selection-start-line="69" selection-start-column="4" selection-end-line="171" selection-end-column="5" />
-              <folding>
-                <element signature="method#calculateWinLoss#0;class#SuperSmootherFilter#0" expanded="false" />
-                <element signature="e#2878#2887#0" expanded="true" />
-                <element signature="e#2951#2960#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ALF_2.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/company/ALF_2.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="128" column="0" selection-start-line="128" selection-start-column="0" selection-end-line="135" selection-end-column="17" />
+              <caret line="202" column="9" selection-start-line="202" selection-start-column="9" selection-end-line="202" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="method#setValueAt#0;class#ALF_2#0" expanded="false" />
-                <element signature="method#setValueAt#1;class#ALF_2#0" expanded="false" />
-                <element signature="method#median#0;class#ALF_2#0" expanded="false" />
-                <element signature="method#calculateWinLoss#0;class#ALF_2#0" expanded="false" />
-                <element signature="e#6680#6689#0" expanded="true" />
-                <element signature="e#6753#6762#0" expanded="true" />
+                <element signature="method#FN#0;class#FATL#0" expanded="false" />
+                <element signature="e#7200#7218#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MA_fn.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/company/MA_fn.java">
+      <file leaf-file-name="StepFilter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/company/StepFilter.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="38" column="17" selection-start-line="38" selection-start-column="17" selection-end-line="38" selection-end-column="17" />
+              <caret line="31" column="41" selection-start-line="31" selection-start-column="41" selection-end-line="31" selection-end-column="41" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#17741#17750#0" expanded="true" />
-                <element signature="e#17814#17823#0" expanded="true" />
+                <element signature="method#calculateWinLoss#0;class#StepFilter#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LaguerreFilter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/company/LaguerreFilter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -175,19 +138,30 @@
         <option value="$PROJECT_DIR$/src/com/company/LaguerreFilter.java" />
         <option value="$PROJECT_DIR$/src/com/company/KalmanFilter.java" />
         <option value="$PROJECT_DIR$/src/com/company/ALF_2.java" />
-        <option value="$PROJECT_DIR$/src/com/company/Main.java" />
         <option value="$PROJECT_DIR$/src/com/company/MA_fn.java" />
         <option value="$PROJECT_DIR$/src/com/company/SuperSmootherFilter.java" />
         <option value="$PROJECT_DIR$/src/com/company/FisherFilter.java" />
+        <option value="$PROJECT_DIR$/src/com/company/SATL.java" />
+        <option value="$PROJECT_DIR$/src/com/company/FATL2StepFilter.java" />
+        <option value="$PROJECT_DIR$/src/com/company/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/company/StepFilter.java" />
+        <option value="$PROJECT_DIR$/src/com/company/FATL.java" />
+        <option value="$PROJECT_DIR$/src/com/company/NoFilter.java" />
         <option value="$PROJECT_DIR$/src/com/company/SampleForm.java" />
       </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Bundled (Maven 3)" />
+      </MavenGeneralSettings>
     </option>
   </component>
   <component name="NamedScopeManager">
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="2" />
     <option name="y" value="23" />
     <option name="width" value="1395" />
     <option name="height" value="748" />
@@ -215,6 +189,9 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -254,34 +231,9 @@
               <option name="myItemId" value="company" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="SampleForm" />
-              <option name="myItemType" value="com.intellij.uiDesigner.projectView.FormNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="price_plot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="price_plot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="company" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -476,7 +428,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="2" y="23" width="1395" height="748" extended-state="1" />
+    <frame x="0" y="23" width="1395" height="748" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -484,9 +436,8 @@
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32871014" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32871014" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3994452" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24981523" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39939025" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32317072" sideWeight="0.50554323" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20325203" sideWeight="0.509009" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -496,9 +447,10 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20325203" sideWeight="0.490991" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32317072" sideWeight="0.49445677" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.44207317" sideWeight="0.49445677" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32871014" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -531,13 +483,53 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/com/company/NoFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="140" column="51" selection-start-line="140" selection-start-column="51" selection-end-line="140" selection-end-column="51" />
+          <folding>
+            <element signature="method#filter#0;class#NoFilter#0" expanded="false" />
+            <element signature="method#calculateWinLoss#0;class#NoFilter#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/FATL.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="88" column="4" selection-start-line="88" selection-start-column="4" selection-end-line="190" selection-end-column="5" />
+          <folding>
+            <element signature="method#FN#0;class#FATL#0" expanded="false" />
+            <element signature="method#calculateWinLoss#0;class#FATL#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/MA_fn.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="254" column="4" selection-start-line="254" selection-start-column="4" selection-end-line="356" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#calculateWinLoss#0;class#MA_fn#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/IFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="8" column="27" selection-start-line="8" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/company/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="134" column="10" selection-start-line="134" selection-start-column="10" selection-end-line="134" selection-end-column="10" />
           <folding>
-            <element signature="e#3566#3574#0" expanded="true" />
-            <element signature="e#3750#3758#0" expanded="true" />
+            <element signature="e#3767#3775#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -548,12 +540,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4154#4162#0" expanded="true" />
-            <element signature="e#4221#4229#0" expanded="true" />
-            <element signature="e#4525#4533#0" expanded="true" />
-            <element signature="e#4814#4822#0" expanded="true" />
-            <element signature="e#5223#5231#0" expanded="true" />
-            <element signature="e#5499#5507#0" expanded="true" />
+            <element signature="e#4542#4550#0" expanded="true" />
+            <element signature="e#7178#7186#0" expanded="true" />
+            <element signature="e#7469#7477#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -564,6 +553,7 @@
           <caret line="151" column="30" selection-start-line="151" selection-start-column="30" selection-end-line="151" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#4591#4600#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -573,8 +563,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="138" column="20" selection-start-line="138" selection-start-column="20" selection-end-line="138" selection-end-column="20" />
           <folding>
-            <element signature="e#3566#3574#0" expanded="true" />
-            <element signature="e#3750#3758#0" expanded="true" />
+            <element signature="e#3767#3775#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -585,12 +574,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4154#4162#0" expanded="true" />
-            <element signature="e#4221#4229#0" expanded="true" />
-            <element signature="e#4525#4533#0" expanded="true" />
-            <element signature="e#4814#4822#0" expanded="true" />
-            <element signature="e#5223#5231#0" expanded="true" />
-            <element signature="e#5499#5507#0" expanded="true" />
+            <element signature="e#4542#4550#0" expanded="true" />
+            <element signature="e#7178#7186#0" expanded="true" />
+            <element signature="e#7469#7477#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -601,6 +587,7 @@
           <caret line="70" column="33" selection-start-line="70" selection-start-column="33" selection-end-line="70" selection-end-column="33" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#4591#4600#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -609,7 +596,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="16" column="47" selection-start-line="16" selection-start-column="47" selection-end-line="16" selection-end-column="47" />
-          <folding />
+          <folding>
+            <element signature="method#calculateWinLoss#0;class#SuperSmootherFilter#0" expanded="false" />
+            <element signature="e#2878#2887#0" expanded="true" />
+            <element signature="e#2951#2960#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -618,8 +609,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="138" column="20" selection-start-line="138" selection-start-column="20" selection-end-line="138" selection-end-column="20" />
           <folding>
-            <element signature="e#3566#3574#0" expanded="true" />
-            <element signature="e#3750#3758#0" expanded="true" />
+            <element signature="e#3767#3775#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -630,12 +620,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4154#4162#0" expanded="true" />
-            <element signature="e#4221#4229#0" expanded="true" />
-            <element signature="e#4525#4533#0" expanded="true" />
-            <element signature="e#4814#4822#0" expanded="true" />
-            <element signature="e#5223#5231#0" expanded="true" />
-            <element signature="e#5499#5507#0" expanded="true" />
+            <element signature="e#4542#4550#0" expanded="true" />
+            <element signature="e#7178#7186#0" expanded="true" />
+            <element signature="e#7469#7477#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -646,6 +633,7 @@
           <caret line="61" column="30" selection-start-line="61" selection-start-column="30" selection-end-line="61" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#4591#4600#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -654,7 +642,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="16" column="47" selection-start-line="16" selection-start-column="47" selection-end-line="16" selection-end-column="47" />
-          <folding />
+          <folding>
+            <element signature="method#calculateWinLoss#0;class#SuperSmootherFilter#0" expanded="false" />
+            <element signature="e#2878#2887#0" expanded="true" />
+            <element signature="e#2951#2960#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -663,8 +655,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="138" column="20" selection-start-line="138" selection-start-column="20" selection-end-line="138" selection-end-column="20" />
           <folding>
-            <element signature="e#3566#3574#0" expanded="true" />
-            <element signature="e#3750#3758#0" expanded="true" />
+            <element signature="e#3767#3775#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -675,12 +666,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4154#4162#0" expanded="true" />
-            <element signature="e#4221#4229#0" expanded="true" />
-            <element signature="e#4525#4533#0" expanded="true" />
-            <element signature="e#4814#4822#0" expanded="true" />
-            <element signature="e#5223#5231#0" expanded="true" />
-            <element signature="e#5499#5507#0" expanded="true" />
+            <element signature="e#4542#4550#0" expanded="true" />
+            <element signature="e#7178#7186#0" expanded="true" />
+            <element signature="e#7469#7477#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -691,6 +679,7 @@
           <caret line="129" column="21" selection-start-line="129" selection-start-column="21" selection-end-line="129" selection-end-column="21" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#4591#4600#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -699,7 +688,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="16" column="47" selection-start-line="16" selection-start-column="47" selection-end-line="16" selection-end-column="47" />
-          <folding />
+          <folding>
+            <element signature="method#calculateWinLoss#0;class#SuperSmootherFilter#0" expanded="false" />
+            <element signature="e#2878#2887#0" expanded="true" />
+            <element signature="e#2951#2960#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -708,8 +701,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="138" column="20" selection-start-line="138" selection-start-column="20" selection-end-line="138" selection-end-column="20" />
           <folding>
-            <element signature="e#3566#3574#0" expanded="true" />
-            <element signature="e#3750#3758#0" expanded="true" />
+            <element signature="e#3767#3775#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -720,12 +712,9 @@
           <caret line="80" column="43" selection-start-line="80" selection-start-column="43" selection-end-line="80" selection-end-column="43" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4154#4162#0" expanded="true" />
-            <element signature="e#4221#4229#0" expanded="true" />
-            <element signature="e#4525#4533#0" expanded="true" />
-            <element signature="e#4814#4822#0" expanded="true" />
-            <element signature="e#5223#5231#0" expanded="true" />
-            <element signature="e#5499#5507#0" expanded="true" />
+            <element signature="e#4542#4550#0" expanded="true" />
+            <element signature="e#7178#7186#0" expanded="true" />
+            <element signature="e#7469#7477#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -736,6 +725,7 @@
           <caret line="129" column="21" selection-start-line="129" selection-start-column="21" selection-end-line="129" selection-end-column="21" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#4591#4600#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -744,7 +734,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="method#calculateWinLoss#0;class#SuperSmootherFilter#0" expanded="false" />
+            <element signature="e#2878#2887#0" expanded="true" />
+            <element signature="e#2951#2960#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -753,8 +747,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="138" column="20" selection-start-line="138" selection-start-column="20" selection-end-line="138" selection-end-column="20" />
           <folding>
-            <element signature="e#3566#3574#0" expanded="true" />
-            <element signature="e#3750#3758#0" expanded="true" />
+            <element signature="e#3767#3775#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -765,12 +758,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4154#4162#0" expanded="true" />
-            <element signature="e#4221#4229#0" expanded="true" />
-            <element signature="e#4525#4533#0" expanded="true" />
-            <element signature="e#4814#4822#0" expanded="true" />
-            <element signature="e#5223#5231#0" expanded="true" />
-            <element signature="e#5499#5507#0" expanded="true" />
+            <element signature="e#4542#4550#0" expanded="true" />
+            <element signature="e#7178#7186#0" expanded="true" />
+            <element signature="e#7469#7477#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -781,6 +771,7 @@
           <caret line="81" column="17" selection-start-line="81" selection-start-column="17" selection-end-line="81" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#4591#4600#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -789,7 +780,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="27" column="33" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
-          <folding />
+          <folding>
+            <element signature="method#calculateWinLoss#0;class#SuperSmootherFilter#0" expanded="false" />
+            <element signature="e#2878#2887#0" expanded="true" />
+            <element signature="e#2951#2960#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -798,8 +793,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="137" column="0" selection-start-line="137" selection-start-column="0" selection-end-line="137" selection-end-column="0" />
           <folding>
-            <element signature="e#3566#3574#0" expanded="true" />
-            <element signature="e#3750#3758#0" expanded="true" />
+            <element signature="e#3767#3775#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -810,12 +804,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4154#4162#0" expanded="true" />
-            <element signature="e#4221#4229#0" expanded="true" />
-            <element signature="e#4525#4533#0" expanded="true" />
-            <element signature="e#4814#4822#0" expanded="true" />
-            <element signature="e#5223#5231#0" expanded="true" />
-            <element signature="e#5499#5507#0" expanded="true" />
+            <element signature="e#4542#4550#0" expanded="true" />
+            <element signature="e#7178#7186#0" expanded="true" />
+            <element signature="e#7469#7477#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -826,6 +817,7 @@
           <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#4591#4600#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -834,7 +826,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="27" column="33" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
-          <folding />
+          <folding>
+            <element signature="method#calculateWinLoss#0;class#SuperSmootherFilter#0" expanded="false" />
+            <element signature="e#2878#2887#0" expanded="true" />
+            <element signature="e#2951#2960#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -871,30 +867,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/company/IFilter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.28846154">
-          <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/company/AdaptiveLaguerreFilter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5254777">
           <caret line="99" column="0" selection-start-line="78" selection-start-column="4" selection-end-line="120" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#AdaptiveLaguerreFilter#0;class#AdaptiveLaguerreFilter#0" expanded="false" />
-            <element signature="method#adaptiveGamma#0;class#AdaptiveLaguerreFilter#0" expanded="false" />
-            <element signature="method#setValueAt#0;class#AdaptiveLaguerreFilter#0" expanded="false" />
-            <element signature="method#setValueAt#1;class#AdaptiveLaguerreFilter#0" expanded="false" />
-            <element signature="method#median#0;class#AdaptiveLaguerreFilter#0" expanded="false" />
-            <element signature="method#SMA#0;class#AdaptiveLaguerreFilter#0" expanded="false" />
-            <element signature="method#triMaGen#0;class#AdaptiveLaguerreFilter#0" expanded="false" />
-            <element signature="method#laguerre#0;class#AdaptiveLaguerreFilter#0" expanded="false" />
-            <element signature="method#filter#0;class#AdaptiveLaguerreFilter#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -909,34 +885,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/company/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="8" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
-          <folding>
-            <element signature="e#3566#3574#0" expanded="true" />
-            <element signature="e#3750#3758#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/company/LaguerreFilter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/company/MA_fn.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="38" column="17" selection-start-line="38" selection-start-column="17" selection-end-line="38" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#17741#17750#0" expanded="true" />
-            <element signature="e#17814#17823#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -970,7 +923,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/company/FisherFilter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state vertical-scroll-proportion="0.23248407">
           <caret line="205" column="34" selection-start-line="205" selection-start-column="34" selection-end-line="205" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -982,18 +935,100 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/company/SampleForm.java">
+    <entry file="file://$PROJECT_DIR$/src/com/company/SATL.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41105768">
-          <caret line="180" column="52" selection-start-line="180" selection-start-column="52" selection-end-line="180" selection-end-column="52" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="23" selection-start-line="19" selection-start-column="23" selection-end-line="19" selection-end-column="23" />
+          <folding>
+            <element signature="method#FN#0;class#SATL#0" expanded="false" />
+            <element signature="e#6548#6557#0" expanded="true" />
+            <element signature="e#6621#6630#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/MA_fn.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="254" column="4" selection-start-line="254" selection-start-column="4" selection-end-line="356" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4154#4162#0" expanded="true" />
-            <element signature="e#4221#4229#0" expanded="true" />
-            <element signature="e#4525#4533#0" expanded="true" />
-            <element signature="e#4814#4822#0" expanded="true" />
-            <element signature="e#5223#5231#0" expanded="true" />
-            <element signature="e#5499#5507#0" expanded="true" />
+            <element signature="method#calculateWinLoss#0;class#MA_fn#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/IFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="8" column="31" selection-start-line="8" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="137" column="14" selection-start-line="137" selection-start-column="14" selection-end-line="137" selection-end-column="14" />
+          <folding>
+            <element signature="e#3767#3775#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/StepFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="31" column="41" selection-start-line="31" selection-start-column="41" selection-end-line="31" selection-end-column="41" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#calculateWinLoss#0;class#StepFilter#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/FATL.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="202" column="9" selection-start-line="202" selection-start-column="9" selection-end-line="202" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#FN#0;class#FATL#0" expanded="false" />
+            <element signature="e#7200#7218#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/FATL2StepFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6035503">
+          <caret line="44" column="1" selection-start-line="44" selection-start-column="1" selection-end-line="44" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/SampleForm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="207" column="30" selection-start-line="207" selection-start-column="30" selection-end-line="207" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4542#4550#0" expanded="true" />
+            <element signature="e#7178#7186#0" expanded="true" />
+            <element signature="e#7469#7477#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/NoFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.6863905">
+          <caret line="132" column="27" selection-start-line="132" selection-start-column="27" selection-end-line="132" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#filter#0;class#NoFilter#0" expanded="false" />
+            <element signature="e#1621#1630#0" expanded="true" />
+            <element signature="e#3771#3789#0" expanded="true" />
           </folding>
         </state>
       </provider>

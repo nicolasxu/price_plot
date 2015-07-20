@@ -35,6 +35,10 @@ public class SampleForm extends ApplicationFrame {
     public KalmanFilter kFilter;
     public ALF_2 laguerreFilter;
     public MA_fn mafnFilter;
+    SuperSmootherFilter ssFilter;
+    FATL fatlFilter2;
+    FATL2StepFilter fatl2StepFilter;
+    StepFilter stepFilter;
 
     public SampleForm() {
 
@@ -140,33 +144,56 @@ public class SampleForm extends ApplicationFrame {
         XYSeries kalmanSeries = new XYSeries("Kalman");
         XYSeries laguerreSeries = new XYSeries("Laguerre - not adaptive");
         XYSeries mafnSeries = new XYSeries("Moving Average FN");
+        XYSeries satlSeries = new XYSeries("SATL");
+        XYSeries fatlSeries = new XYSeries("FATL");
+        XYSeries fatlSeries2 = new XYSeries("FATL2");
+        XYSeries fatl2StepSeries = new XYSeries("FATL2Step");
+        XYSeries stepSeries = new XYSeries("Step");
+
+        // SATL filter
+        ArrayList<Double> satlData = new ArrayList<Double>();
+        SATL satlFilter = new SATL();
+        satlFilter.filter(data, satlData);
+        //satlFilter.calculateWinLoss(data, satlData, satlFilter.buySellSignal);
+
+        // FATL filter
+        ArrayList<Double> fatlData = new ArrayList<Double>();
+        FATL fatlFilter = new FATL();
+        fatlFilter.filter(data, fatlData);
+        //fatlFilter.calculateWinLoss(data, fatlData, fatlFilter.buySellSignal);
+
+        // FATL2 filter
+        ArrayList<Double> fatlData2 = new ArrayList<Double>();
+        fatlFilter2 = new FATL();
+        fatlFilter2.filter(fatlData, fatlData2);
+        //fatlFilter2.calculateWinLoss(data, fatlData2, fatlFilter2.buySellSignal);
+
 
         // Fisher filter
         ArrayList<Double> fisherData = new ArrayList<Double>();
         ArrayList<Double> fisherTrigger = new ArrayList<Double>();
         FisherFilter fisherFilter = new FisherFilter(15);
         fisherFilter.filter(data, fisherData, fisherTrigger);
-        fisherFilter.calculateWinLoss(data, fisherData, fisherFilter.buySellSignal);
+        //fisherFilter.calculateWinLoss(data, fisherData, fisherFilter.buySellSignal);
 
 
         // Super Smooth filter
         ArrayList<Double> smoothedData = new ArrayList<Double>();
-        SuperSmootherFilter ssFilter = new SuperSmootherFilter(3); // 14
-        ssFilter.filter(data, smoothedData);
+        ssFilter = new SuperSmootherFilter(3); // 14
+        ssFilter.filter(fatlData, smoothedData);
         //ssFilter.calculateWinLoss(data, smoothedData, ssFilter.buySellSignal);
 
         // Kalman Filter
         ArrayList<Double> kalmanData = new ArrayList<Double>();
-        kFilter = new KalmanFilter(1); // 5, 10
-
-        kFilter.filter(data, kalmanData);
+        kFilter = new KalmanFilter(60); // 5, 10
+        kFilter.filter(fatlData2, kalmanData);
         //kFilter.calculateWinLoss(data, kalmanData, kFilter.buySellSignal);
-        System.out.println("input size: " + data.size() + " output size: " + kalmanData.size() + " signal size: " + kFilter.buySellSignal.size());
+        //System.out.println("input size: " + data.size() + " output size: " + kalmanData.size() + " signal size: " + kFilter.buySellSignal.size());
 
         // Laguerre Filter
         ArrayList<Double> laguerreData = new ArrayList<Double>();
         laguerreFilter = new ALF_2(2); // 10
-        laguerreFilter.filter(data, laguerreData);
+        laguerreFilter.filter(smoothedData, laguerreData);
         //laguerreFilter.calculateWinLoss(data, laguerreData, laguerreFilter.buySellSignal);
 
         // MA_fn Filter
@@ -175,7 +202,23 @@ public class SampleForm extends ApplicationFrame {
         mafnFilter.filter(data, mafnData);
         //mafnFilter.calculateWinLoss(data, mafnData, mafnFilter.buySellSignal);
 
+        // no Filter
+        ArrayList<Double> noFilterData = new ArrayList<Double>();
+        NoFilter noFilter = new NoFilter();
+        noFilter.filter(data, noFilterData);
+        noFilter.calculateWinLoss(data, noFilterData, noFilter.buySellSignal);
 
+        // FATL2StepFilter
+        ArrayList<Double> fatl2StepOutput = new ArrayList<Double>();
+        fatl2StepFilter = new FATL2StepFilter(50);
+        fatl2StepFilter.filter(data, fatl2StepOutput);
+        //fatl2StepFilter.calculateWinLoss(data, fatl2StepOutput, fatl2StepFilter.buySellSignal);
+
+        // StepFilter
+        ArrayList<Double> stepOutput = new ArrayList<Double>();
+        stepFilter = new StepFilter(60);
+        stepFilter.filter(data, stepOutput);
+        //stepFilter.calculateWinLoss(data, stepOutput, stepFilter.buySellSignal);
 
 
         // prepare series data for all filter series
@@ -185,16 +228,25 @@ public class SampleForm extends ApplicationFrame {
             kalmanSeries.add(i, kalmanData.get(i));
             laguerreSeries.add(i, laguerreData.get(i));
             mafnSeries.add(i, mafnData.get(i));
+            satlSeries.add(i, satlData.get(i));
+            fatlSeries.add(i, fatlData.get(i));
+            fatlSeries2.add(i, fatlData2.get(i));
+            fatl2StepSeries.add(i, fatl2StepOutput.get(i));
+            stepSeries.add(i, stepOutput.get(i));
 
         }
 
         XYSeriesCollection dataCollection = new XYSeriesCollection();
         dataCollection.addSeries(priceSeries);
         //dataCollection.addSeries(smoothedSeries);
-        //dataCollection.addSeries(kalmanSeries);
+        dataCollection.addSeries(kalmanSeries);
         //dataCollection.addSeries(laguerreSeries);
-        dataCollection.addSeries(mafnSeries);
-
+        //dataCollection.addSeries(mafnSeries);
+        //dataCollection.addSeries(satlSeries);
+        //dataCollection.addSeries(fatlSeries2);
+        //dataCollection.addSeries(fatlSeries);
+        //dataCollection.addSeries(fatl2StepSeries);
+        //dataCollection.addSeries(stepSeries);
         return dataCollection;
     }
 
@@ -237,9 +289,16 @@ public class SampleForm extends ApplicationFrame {
 //                    }
 
                     // use laguerre signal
-                    if(item < mafnFilter.buySellSignal.size()) {
-                        isBuy = mafnFilter.buySellSignal.get(item);
+                    if(item <  stepFilter.buySellSignal.size()) {
+                        isBuy = stepFilter.buySellSignal.get(item);
                     }
+
+                    // test
+                    if(item <4350 && item > 4329) {
+                        //System.out.println("fatlFilter2.buySellSignal["+item+"]= " + isBuy);
+
+                    }
+                    // end of test
 
 
 

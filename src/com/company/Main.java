@@ -130,9 +130,9 @@ public class Main {
             input.add(closePrice[i]);
         }
 
-        MA_fn mafn = new MA_fn(4);
+        StepFilter stepFilter = new StepFilter(10);
         ArrayList<Double> output = new ArrayList<Double>();
-        mafn.filter(input, output);
+        stepFilter.filter(input, output);
 
         for(Double value: output) {
             //System.out.println(value);
