@@ -22,7 +22,6 @@ import java.awt.geom.Ellipse2D;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -37,7 +36,7 @@ public class SampleForm extends ApplicationFrame {
     public MA_fn mafnFilter;
     SuperSmootherFilter ssFilter;
     FATL fatlFilter2;
-    FATL2StepFilter fatl2StepFilter;
+    FatlStepFilter fatlStepFilter;
     StepFilter stepFilter;
 
     public SampleForm() {
@@ -82,7 +81,7 @@ public class SampleForm extends ApplicationFrame {
     }
 
     private void readDataFileTo(ArrayList<Double> data) {
-        this.fileName = "tick50diff201501.csv"; //"tick50diff.csv";
+        this.fileName = "tick50diff201407.csv"; //"tick50diff.csv";
         String filePath = "/Users/nick/IdeaProjects/price_plot/";
 
         FileReader fr;
@@ -121,13 +120,6 @@ public class SampleForm extends ApplicationFrame {
         } catch(IOException e) {
             e.printStackTrace();
         }
-        /* test
-        for(int i = 0 ;i < data.size(); i++) {
-            System.out.println(i + ": " + data.get(i));
-        }
-        */
-
-
     }
 
 
@@ -207,12 +199,14 @@ public class SampleForm extends ApplicationFrame {
         NoFilter noFilter = new NoFilter();
         noFilter.filter(data, noFilterData);
         noFilter.calculateWinLoss(data, noFilterData, noFilter.buySellSignal);
+        noFilter.calculate2(data, noFilterData, noFilter.buySellSignal);
 
-        // FATL2StepFilter
+        // FatlStepFilter
         ArrayList<Double> fatl2StepOutput = new ArrayList<Double>();
-        fatl2StepFilter = new FATL2StepFilter(50);
-        fatl2StepFilter.filter(data, fatl2StepOutput);
-        //fatl2StepFilter.calculateWinLoss(data, fatl2StepOutput, fatl2StepFilter.buySellSignal);
+        fatlStepFilter = new FatlStepFilter(50);
+        fatlStepFilter.filter(data, fatl2StepOutput);
+        fatlStepFilter.calculateWinLoss(data, fatl2StepOutput, fatlStepFilter.buySellSignal);
+        fatlStepFilter.calculate2(data, fatl2StepOutput, fatlStepFilter.buySellSignal);
 
         // StepFilter
         ArrayList<Double> stepOutput = new ArrayList<Double>();
@@ -239,13 +233,13 @@ public class SampleForm extends ApplicationFrame {
         XYSeriesCollection dataCollection = new XYSeriesCollection();
         dataCollection.addSeries(priceSeries);
         //dataCollection.addSeries(smoothedSeries);
-        dataCollection.addSeries(kalmanSeries);
+        //dataCollection.addSeries(kalmanSeries);
         //dataCollection.addSeries(laguerreSeries);
         //dataCollection.addSeries(mafnSeries);
         //dataCollection.addSeries(satlSeries);
         //dataCollection.addSeries(fatlSeries2);
         //dataCollection.addSeries(fatlSeries);
-        //dataCollection.addSeries(fatl2StepSeries);
+        dataCollection.addSeries(fatl2StepSeries);
         //dataCollection.addSeries(stepSeries);
         return dataCollection;
     }

@@ -3,48 +3,55 @@ package com.company;
 import java.util.ArrayList;
 
 /**
- * Created by nick on 7/18/15.
+ * Created by nick on 7/21/15.
  */
-public class FATL2StepFilter extends IFilter {
+public class AlStepFilter extends IFilter {
 
-    FATL fatlFilter;
-    FATL fatlFilter2;
-    int step;
-    ArrayList<Double> fatl1Output;
-    ArrayList<Double> fatl2Output;
+    ALF_2 alfFilter;
+    ArrayList<Double> alfOutput;
     double prevPrice;
-    public ArrayList<Integer> buySellSignal;
+    ArrayList<Integer> buySellSignal;
+    int step;
 
-    public FATL2StepFilter(int step) {
-        this.fatlFilter  = new FATL();
-        this.fatlFilter2 = new FATL();
-        this.step = step;
-        this.fatl1Output = new ArrayList<Double>();
-        this.fatl2Output = new ArrayList<Double>();
+
+    public AlStepFilter(int step) {
+        this.alfFilter = new ALF_2(2);
+        this.alfOutput = new ArrayList<Double>();
         this.prevPrice = 0;
         this.buySellSignal = new ArrayList<Integer>();
-
+        this.step = step;
     }
 
     public void filter(ArrayList<Double> input, ArrayList<Double> output) {
-        this.fatlFilter.filter(input, fatl1Output);
-        //this.fatlFilter2.filter(fatl1Output, fatl2Output);
 
+        if(output == null) {
+            output = new ArrayList<Double>();
+
+        }
+        this.alfFilter.filter(input, alfOutput);
 
         for(int index = 0; index < input.size(); index++) {
+
             if(index == 0) {
-                this.prevPrice = input.get(index);
+                // first index
+                this.prevPrice = alfOutput.get(index); // first value of filter output
                 output.add(this.prevPrice);
                 this.buySellSignal.add(-1);
+
+
+
             } else {
-                // 2nd and on...
-                if(Math.abs(fatl1Output.get(index) - prevPrice) >= this.step * 0.00001) {
-                    output.add(fatl1Output.get(index));
+                // 2nd index and on...
+
+
+
+                if(Math.abs(alfOutput.get(index) - prevPrice) >= this.step * 0.00001) {
+                    output.add(alfOutput.get(index));
                 } else {
                     output.add(output.get(index -1));
                 }
 
-                this.prevPrice = fatl1Output.get(index);
+                this.prevPrice = alfOutput.get(index);
 
                 // calculate buySellSignal
                 buySellSignal.add(index, buySellSignal.get(index -1));
@@ -54,17 +61,14 @@ public class FATL2StepFilter extends IFilter {
                 if (output.get(index) <  output.get(index -1)) {
                     this.buySellSignal.set(index, 0);
                 }
+
             }
         }
 
-        /*
-        if(MathAbs(xma-prevxma)>=dStep) XXMA[bar]=xma+dPriceShift;
-        else XXMA[bar]=XXMA[bar-1];
-
-        if(bar<rates_total-1) prevxma=xma;
-        */
 
     }
+
+
     public void calculateWinLoss(ArrayList<Double> input, ArrayList<Double> output, ArrayList<Integer> signal) {
         int total = input.size();
         int currentSignal;
@@ -141,7 +145,11 @@ public class FATL2StepFilter extends IFilter {
                 }
             }
         }
+        System.out.println("Laguerre Step P&L with Laguerre(step: "+this.step+")");
+        System.out.println("Laguerre Step (adaptive) Win Count: " + winCount);
+        System.out.println("Laguerre Step (adaptive) Lose Count: " + lossCount);
 
+        System.out.println("----------------------------------------");
         int tempWin = 0, tempLoss = 0;
         int maxLossRow = 0, tempMaxLossRow = 0;
         int maxLossRowPoint = 0;
@@ -160,11 +168,10 @@ public class FATL2StepFilter extends IFilter {
             }
             //System.out.println(i + " :" + winLossList.get(i));
         }
-        System.out.println("FATL2Step P&L with ()");
-        System.out.println("----------------------------------------");
-        System.out.println("FATL2Step wins: " + tempWin + " Loss: " + tempLoss);
-        System.out.println("FATL2Step Max loss in a row: " + maxLossRow + " end at: " + winLossInputIndex.get(maxLossRowPoint));
+        System.out.println("tempwins: " + tempWin + " tempLoss: " + tempLoss);
+        System.out.println("Max loss in a row: " + maxLossRow + " end at: " + winLossInputIndex.get(maxLossRowPoint));
 
     }
+
 
 }

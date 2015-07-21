@@ -1,6 +1,5 @@
 package com.company;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -10,8 +9,6 @@ import java.util.Arrays;
 
 
 public class ALF_2 extends IFilter {
-
-
 
     ArrayList<Double> l0, l1, l2, l3;
 
@@ -309,7 +306,5 @@ public class ALF_2 extends IFilter {
         System.out.println("Max loss in a row: " + maxLossRow + " end at: " + winLossInputIndex.get(maxLossRowPoint));
 
     }
-
-
 
 }
