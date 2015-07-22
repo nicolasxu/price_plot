@@ -145,11 +145,7 @@ public class AlStepFilter extends IFilter {
                 }
             }
         }
-        System.out.println("Laguerre Step P&L with Laguerre(step: "+this.step+")");
-        System.out.println("Laguerre Step (adaptive) Win Count: " + winCount);
-        System.out.println("Laguerre Step (adaptive) Lose Count: " + lossCount);
 
-        System.out.println("----------------------------------------");
         int tempWin = 0, tempLoss = 0;
         int maxLossRow = 0, tempMaxLossRow = 0;
         int maxLossRowPoint = 0;
@@ -168,8 +164,11 @@ public class AlStepFilter extends IFilter {
             }
             //System.out.println(i + " :" + winLossList.get(i));
         }
-        System.out.println("tempwins: " + tempWin + " tempLoss: " + tempLoss);
+        System.out.println("Laguerre Step P&L with Laguerre(step: "+this.step+")");
+        System.out.println("wins: " + tempWin + " Loss: " + tempLoss);
         System.out.println("Max loss in a row: " + maxLossRow + " end at: " + winLossInputIndex.get(maxLossRowPoint));
+        System.out.println("--------------------------------------------");
+        System.out.println("\n");
 
     }
 

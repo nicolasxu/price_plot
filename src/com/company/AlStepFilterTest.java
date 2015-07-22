@@ -14,22 +14,23 @@ import java.util.ArrayList;
  */
 public class AlStepFilterTest {
 
+
     double closePrice[];
     ArrayList<Double> inputSampleData;
     ArrayList<Double> input;
     AlStepFilter alfStepFilter;
     String fileName;
+    ArrayList<String> fileNames;
+    String filePath;
 
-    private void readDataFileTo(ArrayList<Double> data) {
-        this.fileName = "tick50diff201407.csv"; //"tick50diff.csv";
-        String filePath = "/Users/nick/IdeaProjects/price_plot/";
+    private void readDataFileTo(String fileName, ArrayList<Double> data) {
 
         FileReader fr;
         BufferedReader br;
         String line = null;
 
         try {
-            fr = new FileReader(filePath + fileName);
+            fr = new FileReader(this.filePath + fileName);
             br = new BufferedReader(fr);
             while((line = br.readLine()) != null) {
 
@@ -37,7 +38,7 @@ public class AlStepFilterTest {
                 String[] columns = line.split(",");
                 double bid, ask, mid;
 
-                if(this.fileName.contains("IB")) {
+                if(fileName.contains("IB")) {
                     bid = Double.parseDouble(columns[1]);
                     ask = Double.parseDouble(columns[2]);
                     mid = (bid + ask) / 2;
@@ -65,6 +66,29 @@ public class AlStepFilterTest {
     @Before
     public void setUp() throws Exception {
         this.input = new ArrayList<Double>();
+        this.filePath = "/Users/nick/IdeaProjects/price_plot/";
+        this.fileNames = new ArrayList<String>();
+        fileNames.add("tick50diff201401.csv");
+        fileNames.add("tick50diff201402.csv");
+        fileNames.add("tick50diff201403.csv");
+        fileNames.add("tick50diff201404.csv");
+        fileNames.add("tick50diff201405.csv");
+        fileNames.add("tick50diff201406.csv");
+        fileNames.add("tick50diff201407.csv");
+        fileNames.add("tick50diff201408.csv");
+        fileNames.add("tick50diff201409.csv");
+        fileNames.add("tick50diff201410.csv");
+        fileNames.add("tick50diff201411.csv");
+        fileNames.add("tick50diff201412.csv");
+        // 2015 data
+        fileNames.add("tick50diff201501.csv");
+        fileNames.add("tick50diff201502.csv");
+        fileNames.add("tick50diff201503.csv");
+        fileNames.add("tick50diff201504.csv");
+        fileNames.add("tick50diff201505.csv");
+        fileNames.add("tick50diff201506.csv");
+
+
 
         closePrice = new double[100];
         closePrice[0]=1.1815;
@@ -190,15 +214,26 @@ public class AlStepFilterTest {
 
     @Test
     public void testFilter() throws Exception {
-        ArrayList<Double> output = new ArrayList<Double>();
-        this.readDataFileTo(this.input);
-        System.out.println("input.size(): " + this.input.size());
-        this.alfStepFilter.filter(input, output);
-        this.alfStepFilter.calculateWinLoss(input, output, this.alfStepFilter.buySellSignal );
 
-        for(Double result: output) {
-            //System.out.println(result);
+
+        for(int fileIndex = 0; fileIndex < this.fileNames.size(); fileIndex++) {
+            String fileName = this.fileNames.get(fileIndex);
+
+            ArrayList<Double> tempInput = new ArrayList<Double>();
+            ArrayList<Double> tempOutput = new ArrayList<Double>();
+            AlStepFilter tempFilter = new AlStepFilter(10);
+
+            this.readDataFileTo(fileName, tempInput);
+
+            tempFilter.filter(tempInput, tempOutput);
+            System.out.println("====== " +fileName+ " =======");
+            tempFilter.calculateWinLoss(tempInput, tempOutput, tempFilter.buySellSignal);
+
+
+
         }
+
+
 
     }
 }

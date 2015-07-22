@@ -163,11 +163,7 @@ public class FATL extends IFilter {
                 }
             }
         }
-        System.out.println("FATL P&L with ()");
-        //System.out.println("FATL Win Count: " + winCount);
-        //System.out.println("FATL Lose Count: " + lossCount);
 
-        System.out.println("----------------------------------------");
         int tempWin = 0, tempLoss = 0;
         int maxLossRow = 0, tempMaxLossRow = 0;
         int maxLossRowPoint = 0;
@@ -196,10 +192,15 @@ public class FATL extends IFilter {
             }
             //System.out.println(i + " :" + winLossList.get(i));
         }
-        System.out.println("FATL tempwins: " + tempWin + " tempLoss: " + tempLoss);
+        System.out.println("FATL P&L with ()");
+
+        System.out.println("FATL Wins: " + tempWin + " Loss: " + tempLoss);
         System.out.println("FATL Max loss in a row: " + maxLossRow + " end at: " + winLossInputIndex.get(maxLossRowPoint));
+        System.out.println("----------------------------------------");
+        System.out.println("\n");
+
         for(Integer key: maxLossInRowDist.keySet()) {
-            System.out.println(key + " :" + maxLossInRowDist.get(key));
+            //System.out.println(key + " :" + maxLossInRowDist.get(key));
         }
 
     }

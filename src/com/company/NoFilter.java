@@ -152,12 +152,12 @@ public class NoFilter extends IFilter {
             }
         }
         System.out.println("NoFilter P&L with ()");
-        System.out.println("----------------------------------------");
-        System.out.println("NoFilter tempwins: " + tempWin + " tempLoss: " + tempLoss);
+        System.out.println("NoFilter Wins: " + tempWin + " Loss: " + tempLoss);
         System.out.println("NoFilter Max loss in a row: " + maxLossRow + " end at: " + winLossInputIndex.get(maxLossRowPoint));
+        System.out.println("----------------------------------------");
 
         for(Integer key: maxLossInRowDist.keySet()) {
-            System.out.println(key + " :" + maxLossInRowDist.get(key));
+            //System.out.println(key + " :" + maxLossInRowDist.get(key));
         }
 
     }
