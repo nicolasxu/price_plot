@@ -23,7 +23,7 @@ public class AlStepFilterTest {
     ArrayList<String> fileNames;
     String filePath;
 
-    private void readDataFileTo(String fileName, ArrayList<Double> data) {
+    protected void readDataFileTo(String fileName, ArrayList<Double> data) {
 
         FileReader fr;
         BufferedReader br;
@@ -68,6 +68,19 @@ public class AlStepFilterTest {
         this.input = new ArrayList<Double>();
         this.filePath = "/Users/nick/IdeaProjects/price_plot/";
         this.fileNames = new ArrayList<String>();
+        fileNames.add("tick50diff201301.csv");
+        fileNames.add("tick50diff201302.csv");
+        fileNames.add("tick50diff201303.csv");
+        fileNames.add("tick50diff201304.csv");
+        fileNames.add("tick50diff201305.csv");
+        fileNames.add("tick50diff201306.csv");
+        fileNames.add("tick50diff201307.csv");
+        fileNames.add("tick50diff201308.csv");
+        fileNames.add("tick50diff201309.csv");
+        fileNames.add("tick50diff201310.csv");
+        fileNames.add("tick50diff201311.csv");
+        fileNames.add("tick50diff201312.csv");
+
         fileNames.add("tick50diff201401.csv");
         fileNames.add("tick50diff201402.csv");
         fileNames.add("tick50diff201403.csv");

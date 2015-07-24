@@ -38,6 +38,8 @@ public class SampleForm extends ApplicationFrame {
     FATL fatlFilter2;
     FatlStepFilter fatlStepFilter;
     StepFilter stepFilter;
+    NoFilter noFilter;
+    AlStepFilter alStepFilter;
 
     public SampleForm() {
 
@@ -81,7 +83,7 @@ public class SampleForm extends ApplicationFrame {
     }
 
     private void readDataFileTo(ArrayList<Double> data) {
-        this.fileName = "tick50diff201407.csv"; //"tick50diff.csv";
+        this.fileName = "tick50diff20150303.csv"; //"tick50diff.csv";
         String filePath = "/Users/nick/IdeaProjects/price_plot/";
 
         FileReader fr;
@@ -141,6 +143,8 @@ public class SampleForm extends ApplicationFrame {
         XYSeries fatlSeries2 = new XYSeries("FATL2");
         XYSeries fatl2StepSeries = new XYSeries("FATL2Step");
         XYSeries stepSeries = new XYSeries("Step");
+        XYSeries noFilterSeries = new XYSeries("NoFilter");
+        XYSeries alStepSeries = new XYSeries("AlStep");
 
         // SATL filter
         ArrayList<Double> satlData = new ArrayList<Double>();
@@ -196,23 +200,28 @@ public class SampleForm extends ApplicationFrame {
 
         // no Filter
         ArrayList<Double> noFilterData = new ArrayList<Double>();
-        NoFilter noFilter = new NoFilter();
+        noFilter = new NoFilter();
         noFilter.filter(data, noFilterData);
         noFilter.calculateWinLoss(data, noFilterData, noFilter.buySellSignal);
-        noFilter.calculate2(data, noFilterData, noFilter.buySellSignal);
+        noFilter.calculate3(data, noFilterData, noFilter.buySellSignal);
 
         // FatlStepFilter
         ArrayList<Double> fatl2StepOutput = new ArrayList<Double>();
         fatlStepFilter = new FatlStepFilter(50);
         fatlStepFilter.filter(data, fatl2StepOutput);
-        fatlStepFilter.calculateWinLoss(data, fatl2StepOutput, fatlStepFilter.buySellSignal);
-        fatlStepFilter.calculate2(data, fatl2StepOutput, fatlStepFilter.buySellSignal);
+        //fatlStepFilter.calculateWinLoss(data, fatl2StepOutput, fatlStepFilter.buySellSignal);
+        //fatlStepFilter.calculate2(data, fatl2StepOutput, fatlStepFilter.buySellSignal);
 
         // StepFilter
         ArrayList<Double> stepOutput = new ArrayList<Double>();
         stepFilter = new StepFilter(60);
         stepFilter.filter(data, stepOutput);
         //stepFilter.calculateWinLoss(data, stepOutput, stepFilter.buySellSignal);
+
+        ArrayList<Double> alStepOutput = new ArrayList<Double>();
+        alStepFilter = new AlStepFilter(10);
+        alStepFilter.filter(data, alStepOutput);
+        //alStepFilter.calculateWinLoss(data, alStepOutput, alStepFilter.buySellSignal);
 
 
         // prepare series data for all filter series
@@ -227,11 +236,14 @@ public class SampleForm extends ApplicationFrame {
             fatlSeries2.add(i, fatlData2.get(i));
             fatl2StepSeries.add(i, fatl2StepOutput.get(i));
             stepSeries.add(i, stepOutput.get(i));
+            noFilterSeries.add(i, noFilterData.get(i));
+            alStepSeries.add(i, alStepOutput.get(i));
+
 
         }
 
         XYSeriesCollection dataCollection = new XYSeriesCollection();
-        dataCollection.addSeries(priceSeries);
+        //dataCollection.addSeries(priceSeries);
         //dataCollection.addSeries(smoothedSeries);
         //dataCollection.addSeries(kalmanSeries);
         //dataCollection.addSeries(laguerreSeries);
@@ -239,8 +251,10 @@ public class SampleForm extends ApplicationFrame {
         //dataCollection.addSeries(satlSeries);
         //dataCollection.addSeries(fatlSeries2);
         //dataCollection.addSeries(fatlSeries);
-        dataCollection.addSeries(fatl2StepSeries);
+        //dataCollection.addSeries(fatl2StepSeries);
         //dataCollection.addSeries(stepSeries);
+        dataCollection.addSeries(noFilterSeries);
+        //dataCollection.addSeries(alStepSeries);
         return dataCollection;
     }
 
@@ -273,7 +287,7 @@ public class SampleForm extends ApplicationFrame {
 
             public Color getItemColor(int series, int item) {
                 // modify code here to change color for different part of the line in one serie line
-                if(series == 1) {
+                if(series == 0) {
 
                     int isBuy = 0;
 
@@ -283,20 +297,10 @@ public class SampleForm extends ApplicationFrame {
 //                    }
 
                     // use laguerre signal
-                    if(item <  stepFilter.buySellSignal.size()) {
-                        isBuy = stepFilter.buySellSignal.get(item);
+                    if(item <  noFilter.buySellSignal.size()) {
+                        isBuy = noFilter.buySellSignal.get(item);
                     }
 
-                    // test
-                    if(item <4350 && item > 4329) {
-                        //System.out.println("fatlFilter2.buySellSignal["+item+"]= " + isBuy);
-
-                    }
-                    // end of test
-
-
-
-                    //System.out.println("item: " + item + " buySell: " + isBuy);
                     if(isBuy == 1) {
 
                         return Color.red;

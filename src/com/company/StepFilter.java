@@ -1,6 +1,5 @@
 package com.company;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -18,6 +17,8 @@ public class StepFilter extends IFilter {
         this.prevPrice = 0;
     }
 
+
+
     public void filter(ArrayList<Double> input, ArrayList<Double> output) {
 
         if(output == null) {
@@ -34,12 +35,13 @@ public class StepFilter extends IFilter {
             } else {
                 // 2nd and on...
 
-                if(Math.abs(input.get(index) - prevPrice) >= this.step * 0.00001) {
+                if(Math.abs(input.get(index) - prevPrice) >= this.step * 0.00001
+                      ) {
                     output.add(input.get(index));
                 } else {
                     output.add(output.get(index -1));
                 }
-                this.prevPrice = input.get(index);
+                this.prevPrice = input.get( Math.max(index -1, 0)); // min in previous 2 value
 
                 // calculating buySellSignal
                 buySellSignal.add(index, buySellSignal.get(index -1));
