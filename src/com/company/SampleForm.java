@@ -85,7 +85,7 @@ public class SampleForm extends ApplicationFrame {
     }
 
     private void readDataFileTo(ArrayList<Double> data) {
-        this.fileName = "tick50diff201412.csv"; //"tick50diff.csv";
+        this.fileName = "tick50diff201309.csv"; //"tick50diff.csv";
         String filePath = "/Users/nick/IdeaProjects/price_plot/";
 
         FileReader fr;
@@ -236,7 +236,7 @@ public class SampleForm extends ApplicationFrame {
 
         // No Lag Moving Average Filter
         ArrayList<Double> noLagMaOutput = new ArrayList<Double>();
-        noLagMaFilter = new NoLagMaFilter(30);
+        noLagMaFilter = new NoLagMaFilter(20, 15); // length, pointFilter
         noLagMaFilter.filter(data, noLagMaOutput);
         Util.calculateWinLoss(data, noLagMaOutput, noLagMaFilter.buySellSignal, "No Lag MA Filter" );
 

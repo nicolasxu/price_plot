@@ -18,11 +18,12 @@ public class NoLagMaFilter extends IFilter {
     double point;
     ArrayList<Integer> buySellSignal;
 
-    public NoLagMaFilter(int length) {
+    public NoLagMaFilter(int length, int point) {
 
         this.length = length;
+        this.pointFilter = point;
         this.alphas = new ArrayList<Double>();
-        this.pointFilter = 0;
+
         this.pctFilter = 0;
         this.Len = 0;
         this.weight = 0;
@@ -35,7 +36,7 @@ public class NoLagMaFilter extends IFilter {
     private void init() {
 
         this.pctFilter = 0; // 10% in decimal
-        this.pointFilter = 25;
+
         double t, g, cycle = 4;
         double coeff = 3 * Math.PI;
         double phase = this.length -1;
@@ -125,6 +126,7 @@ public class NoLagMaFilter extends IFilter {
                             stdDev = Math.sqrt(sumPow / this.length);
 
                             calculatedFilterPoint = this.pctFilter * stdDev;
+                            //System.out.println("calculatedFilterPoint: " + calculatedFilterPoint);
                         } else {
                             calculatedFilterPoint = 0;
                         }

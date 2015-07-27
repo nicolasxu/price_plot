@@ -24,12 +24,20 @@ public class NoLagMaFilterTest extends AlStepFilterTest{
     @Test
     public void testFilter() throws Exception {
 
-        NoLagMaFilter noLagFilter = new NoLagMaFilter(10);
-        ArrayList<Double> noLagOutput = new ArrayList<Double>();
-        noLagFilter.filter(inputSampleData, noLagOutput);
+        for(int fileIndex = 0; fileIndex < this.fileNames.size(); fileIndex++) {
+            String fileName = this.fileNames.get(fileIndex);
+            // pctFilter 15, length 30 yields good result
+            ArrayList<Double> tempInput = new ArrayList<Double>();
+            ArrayList<Double> tempOutput = new ArrayList<Double>();
+            NoLagMaFilter tempFilter = new NoLagMaFilter(30, 20);
 
-        for(Double value: noLagOutput) {
-            System.out.println(value);
+            this.readDataFileTo(fileName, tempInput);
+
+            tempFilter.filter(tempInput, tempOutput);
+            System.out.println("====== " + fileName + " =======");
+            Util.calculateWinLoss(tempInput, tempOutput, tempFilter.buySellSignal, "No Lag MA Filter");
+            //Util.calculateBuyHold(tempInput, tempOutput, tempFilter.buySellSignal, "No Lag MA Filter");
+
         }
 
     }
