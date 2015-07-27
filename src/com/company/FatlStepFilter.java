@@ -161,9 +161,9 @@ public class FatlStepFilter extends IFilter {
             //System.out.println(i + " :" + winLossList.get(i));
         }
         System.out.println("FATL2Step P&L with ()");
-        System.out.println("----------------------------------------");
         System.out.println("FATL2Step wins: " + tempWin + " Loss: " + tempLoss);
         System.out.println("FATL2Step Max loss in a row: " + maxLossRow + " end at: " + winLossInputIndex.get(maxLossRowPoint));
+        System.out.println("\n");
 
     }
     public void calculate2(ArrayList<Double> priceData, ArrayList<Double> filterOutput,

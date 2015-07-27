@@ -40,6 +40,8 @@ public class SampleForm extends ApplicationFrame {
     StepFilter stepFilter;
     NoFilter noFilter;
     AlStepFilter alStepFilter;
+    FirFilter firFilter;
+    NoLagMaFilter noLagMaFilter;
 
     public SampleForm() {
 
@@ -83,7 +85,7 @@ public class SampleForm extends ApplicationFrame {
     }
 
     private void readDataFileTo(ArrayList<Double> data) {
-        this.fileName = "tick50diff20150303.csv"; //"tick50diff.csv";
+        this.fileName = "tick50diff201412.csv"; //"tick50diff.csv";
         String filePath = "/Users/nick/IdeaProjects/price_plot/";
 
         FileReader fr;
@@ -145,6 +147,8 @@ public class SampleForm extends ApplicationFrame {
         XYSeries stepSeries = new XYSeries("Step");
         XYSeries noFilterSeries = new XYSeries("NoFilter");
         XYSeries alStepSeries = new XYSeries("AlStep");
+        XYSeries firSeries = new XYSeries("fir");
+        XYSeries noLagSeries = new XYSeries("No Lag MA");
 
         // SATL filter
         ArrayList<Double> satlData = new ArrayList<Double>();
@@ -223,6 +227,18 @@ public class SampleForm extends ApplicationFrame {
         alStepFilter.filter(data, alStepOutput);
         //alStepFilter.calculateWinLoss(data, alStepOutput, alStepFilter.buySellSignal);
 
+        // fir filter
+        ArrayList<Double> firOutput = new ArrayList<Double>();
+        firFilter = new FirFilter(20);
+        firFilter.filter(data, firOutput);
+        //firFilter.calculateWinLoss(data, firOutput, firFilter.buySellSignal);
+        //Util.calculateWinLoss(data, firOutput, firFilter.buySellSignal, "FIR Filter");
+
+        // No Lag Moving Average Filter
+        ArrayList<Double> noLagMaOutput = new ArrayList<Double>();
+        noLagMaFilter = new NoLagMaFilter(30);
+        noLagMaFilter.filter(data, noLagMaOutput);
+        Util.calculateWinLoss(data, noLagMaOutput, noLagMaFilter.buySellSignal, "No Lag MA Filter" );
 
         // prepare series data for all filter series
         for(int i = 0; i < data.size(); i++) {
@@ -238,12 +254,15 @@ public class SampleForm extends ApplicationFrame {
             stepSeries.add(i, stepOutput.get(i));
             noFilterSeries.add(i, noFilterData.get(i));
             alStepSeries.add(i, alStepOutput.get(i));
+            firSeries.add(i, firOutput.get(i));
+            noLagSeries.add(i, noLagMaOutput.get(i));
+
 
 
         }
 
         XYSeriesCollection dataCollection = new XYSeriesCollection();
-        //dataCollection.addSeries(priceSeries);
+        dataCollection.addSeries(priceSeries);
         //dataCollection.addSeries(smoothedSeries);
         //dataCollection.addSeries(kalmanSeries);
         //dataCollection.addSeries(laguerreSeries);
@@ -253,8 +272,11 @@ public class SampleForm extends ApplicationFrame {
         //dataCollection.addSeries(fatlSeries);
         //dataCollection.addSeries(fatl2StepSeries);
         //dataCollection.addSeries(stepSeries);
-        dataCollection.addSeries(noFilterSeries);
+        //dataCollection.addSeries(noFilterSeries);
         //dataCollection.addSeries(alStepSeries);
+        //dataCollection.addSeries(firSeries);
+        dataCollection.addSeries(noLagSeries);
+
         return dataCollection;
     }
 
@@ -287,7 +309,7 @@ public class SampleForm extends ApplicationFrame {
 
             public Color getItemColor(int series, int item) {
                 // modify code here to change color for different part of the line in one serie line
-                if(series == 0) {
+                if(series == 1) {
 
                     int isBuy = 0;
 
@@ -297,8 +319,8 @@ public class SampleForm extends ApplicationFrame {
 //                    }
 
                     // use laguerre signal
-                    if(item <  noFilter.buySellSignal.size()) {
-                        isBuy = noFilter.buySellSignal.get(item);
+                    if(item <  noLagMaFilter.buySellSignal.size()) {
+                        isBuy = noLagMaFilter.buySellSignal.get(item);
                     }
 
                     if(isBuy == 1) {

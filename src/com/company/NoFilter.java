@@ -260,7 +260,7 @@ public class NoFilter extends IFilter {
         double totalProfit = 0;
         double profitSize = 50 * 0.00001;
         ArrayList<Integer> winLossList = new ArrayList<Integer>();
-        int maxLossCountAllowed = 3;
+        int maxLossCountAllowed = 21;
 
 
         for(int index = 0; index < total; index++) {
@@ -309,6 +309,11 @@ public class NoFilter extends IFilter {
                         winLossList.add(0); // losing
                         int maxCount = Util.maxPrevLoseCount(winLossList);
                         int calculatedCount = maxCount % maxLossCountAllowed;
+
+                        if(calculatedCount > 10) {
+                            System.out.println("calculatedCount is: " + calculatedCount);
+                        }
+
                         // 1  0
                         // 2  1
                         // 4  2

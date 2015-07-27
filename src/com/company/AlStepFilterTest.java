@@ -234,15 +234,13 @@ public class AlStepFilterTest {
 
             ArrayList<Double> tempInput = new ArrayList<Double>();
             ArrayList<Double> tempOutput = new ArrayList<Double>();
-            AlStepFilter tempFilter = new AlStepFilter(10);
+            AlStepFilter tempFilter = new AlStepFilter(25);
 
             this.readDataFileTo(fileName, tempInput);
 
             tempFilter.filter(tempInput, tempOutput);
             System.out.println("====== " +fileName+ " =======");
             tempFilter.calculateWinLoss(tempInput, tempOutput, tempFilter.buySellSignal);
-
-
 
         }
 
