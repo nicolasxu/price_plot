@@ -68,6 +68,50 @@ public class AlStepFilterTest {
         this.input = new ArrayList<Double>();
         this.filePath = "/Users/nick/IdeaProjects/price_plot/";
         this.fileNames = new ArrayList<String>();
+
+        // 2010 data
+        fileNames.add("tick50diff201001.csv");
+        fileNames.add("tick50diff201002.csv");
+        fileNames.add("tick50diff201003.csv");
+        fileNames.add("tick50diff201004.csv");
+        fileNames.add("tick50diff201005.csv");
+        fileNames.add("tick50diff201006.csv");
+        fileNames.add("tick50diff201007.csv");
+        fileNames.add("tick50diff201008.csv");
+        fileNames.add("tick50diff201009.csv");
+        fileNames.add("tick50diff201010.csv");
+        fileNames.add("tick50diff201011.csv");
+        fileNames.add("tick50diff201012.csv");
+
+        // 2011 data
+        fileNames.add("tick50diff201101.csv");
+        fileNames.add("tick50diff201102.csv");
+        fileNames.add("tick50diff201103.csv");
+        fileNames.add("tick50diff201104.csv");
+        fileNames.add("tick50diff201105.csv");
+        fileNames.add("tick50diff201106.csv");
+        fileNames.add("tick50diff201107.csv");
+        fileNames.add("tick50diff201108.csv");
+        fileNames.add("tick50diff201109.csv");
+        fileNames.add("tick50diff201110.csv");
+        fileNames.add("tick50diff201111.csv");
+        fileNames.add("tick50diff201112.csv");
+
+        // 2012 data
+        fileNames.add("tick50diff201201.csv");
+        fileNames.add("tick50diff201202.csv");
+        fileNames.add("tick50diff201203.csv");
+        fileNames.add("tick50diff201204.csv");
+        fileNames.add("tick50diff201205.csv");
+        fileNames.add("tick50diff201206.csv");
+        fileNames.add("tick50diff201207.csv");
+        fileNames.add("tick50diff201208.csv");
+        fileNames.add("tick50diff201209.csv");
+        fileNames.add("tick50diff201210.csv");
+        fileNames.add("tick50diff201211.csv");
+        fileNames.add("tick50diff201212.csv");
+
+        // 2013 data
         fileNames.add("tick50diff201301.csv");
         fileNames.add("tick50diff201302.csv");
         fileNames.add("tick50diff201303.csv");

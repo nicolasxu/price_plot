@@ -142,17 +142,18 @@ public class Util {
                 tempMaxLossRow = 0;
             }
         }
-        System.out.println(filterName + " P&L with ()");
+        //System.out.println(filterName + " P&L with ()");
         System.out.println(filterName + " Win: " + tempWin + ", Loss: " + tempLoss);
         System.out.println(filterName + " Max loss in a row: " + maxLossRow + " end at: " + winLossInputIndex.get(maxLossRowPoint));
-        System.out.println("----------------------------------------");
-        System.out.println("\n");
+
         for(Integer key: maxLossInRowDist.keySet()) {
             if(key > 0) {
                 System.out.println(key + " :" + maxLossInRowDist.get(key));
             }
 
         }
+        System.out.println("----------------------------------------");
+        System.out.println("\n");
 
     }
 
@@ -227,9 +228,208 @@ public class Util {
                         System.out.println(" position error in reverse to upwards processing");
                 }
             }
+        }
+        System.out.println(FilterName + " total profit is: " + totalPL);
+    }
 
+
+    static public void calculateCapStrategy(ArrayList<Double> priceData, ArrayList<Double> filterOutput,
+                                         ArrayList<Integer> filterBuySellSignal, String FilterName) {
+        // max wrong 4 times, -> max position: pow(2, 4) = 8. Amount more than 8 has to be amortised
+        // by doubling the initial amount
+        int total = priceData.size();
+        int currentSignal;
+        int previousSignal;
+        boolean bought = false;
+        boolean sold = false;
+        double boughtPrice = 0.0;
+        double soldPrice = 0.0;
+        double totalProfit = 0;
+
+
+        double profitPoints = 50 * 0.00001; // 50 points
+        ArrayList<Integer> winLossList = new ArrayList<Integer>();
+        ArrayList<Integer> winLossInputIndex = new ArrayList<Integer>();
+
+        double initialLotSize = 1;
+        double position = 0;
+        double cumulativeLossBelowCap = 0;
+        int amortiseFactor = 2; // recover lot size =  initialLotSize * amortiseFactor;
+
+        double capPosition = initialLotSize * 8; // e.g.: 100k * 8
+
+        double lotToAmortize = 0;
+
+        for(int index = 0; index < total; index++) {
+
+            currentSignal = filterBuySellSignal.get(index);
+            if(index -1 < 0) {
+                previousSignal = filterBuySellSignal.get(0);
+            } else {
+                previousSignal = filterBuySellSignal.get(index - 1);
+            }
+
+            // 1. reverse to up trend
+            if(currentSignal == 1 && previousSignal == 0) {
+                if(position > 0) {
+                    System.out.println("error, signal, 1, 0, position: " + position);
+                }
+                if(position < 0) {
+                    // previous negative position not closed, it is losing deal
+                    // 1. calculate the deal loss
+                    double currentPrice = priceData.get(index);
+                    double thisLoss = (soldPrice - currentPrice) * Math.abs(position); // value is negative
+
+                    // 2. add deal loss to cumulative loss, since we need to use cumulative loss to calculate
+                    //    next position size, cumulative loss will be reset to 0 in the immediate next profit deal
+                    cumulativeLossBelowCap = cumulativeLossBelowCap + Math.abs(thisLoss);
+                    // 3. calculate next possible position
+                    double nextPossiblePosition = cumulativeLossBelowCap / profitPoints + initialLotSize;
+                    double nextDealSize = 0;
+                    if(nextPossiblePosition - capPosition > 0) {
+                        // next position is over capPosition;
+                        // update cumulative loss over the cap position.
+
+                        lotToAmortize = nextPossiblePosition - capPosition;
+                        cumulativeLossBelowCap = cumulativeLossBelowCap - (lotToAmortize - initialLotSize) * profitPoints;
+                        // lotToAmortize will only be amortized when opening new position, whereas cumulativeLossBelowCap
+                        //  is reset to 0 in the immediate next profiting deal, meaning
+                        nextDealSize = capPosition;
+                    } else {
+                        // loss is below or equal the loss cap
+                        nextDealSize = nextPossiblePosition;
+
+                    }
+                    position = nextDealSize; // buying
+                    boughtPrice = priceData.get(index);
+
+                }
+                if(position == 0) {
+                    if (lotToAmortize > 0) {
+
+                        position = amortiseFactor * initialLotSize; // buying
+                        // adjust lossAboveCap
+                        lotToAmortize = lotToAmortize - (amortiseFactor * initialLotSize - initialLotSize );
+                        // e.g. : 750 - 50
+                    } else {
+                        // no cumulative loss
+                        position = initialLotSize;
+                    }
+                    boughtPrice = priceData.get(index);
+                }
+
+            }
+
+            // 2. reverse to down trend
+            if(currentSignal == 0 && previousSignal == 1) {
+                if(position > 0) {
+
+                }
+                if(position < 0) {
+                    System.out.println("error, signal, 0, 1, position: " + position);
+                }
+                if(position == 0) {
+                    if(lotToAmortize > 0) {
+
+                        position = -amortiseFactor * initialLotSize; // selling
+                        // adjus lossAboveCap
+                        lotToAmortize = lotToAmortize - (amortiseFactor * initialLotSize - initialLotSize);
+                    } else {
+                        // no cumulative loss
+                        position = -initialLotSize;
+                    }
+                    soldPrice = priceData.get(index);
+                }
+
+            }
+
+            // 3. up trend continue
+            if(currentSignal ==1 && previousSignal ==1) {
+                // buy trend continue
+                if(position > 0) {
+                    // set cumulativeLossBelowCap to 0
+                    // 1. calculate deal profit
+                    double currentPrice = priceData.get(index);
+                    double thisProfit = (currentPrice - boughtPrice) * position;
+                    totalProfit = totalProfit + thisProfit;
+
+                    // 2. close position to take profit
+                    position = 0;
+
+                    // 2. reset cumulativeLossBelowCap
+                    cumulativeLossBelowCap = 0;
+
+                }
+                if(position < 0) {
+                    System.out.println("error, signal 1, 1, position: " + position);
+                }
+                if(position == 0) {
+                    // do nothing
+                }
+
+            }
+
+            // 4. down trend continue
+            if(currentSignal == 0 && previousSignal == 0) {
+                // sell trend continue
+                if(position > 0) {
+
+                }
+                if(position < 0) {
+
+                }
+                if(position == 0) {
+                    // do nothing
+
+                }
+
+            }
         }
 
-        System.out.println(FilterName + " total profit is: " + totalPL);
+        int tempWin = 0, tempLoss = 0;
+        int maxLossRow = 0, tempMaxLossRow = 0;
+        int maxLossRowPoint = 0;
+        HashMap<Integer, Integer> maxLossInRowDist = new HashMap<Integer, Integer>();
+
+        // calculate loss distribution
+        for(int i = 0; i < winLossList.size(); i++) {
+
+            if(winLossList.get(i) == 0) {
+                tempLoss++;
+                tempMaxLossRow++;
+                if(tempMaxLossRow > maxLossRow) {
+                    maxLossRow = tempMaxLossRow;
+                    maxLossRowPoint = i;
+                }
+            } else {
+                tempWin++;
+
+                if(maxLossInRowDist.containsKey(tempMaxLossRow)) {
+                    int prevNumber = maxLossInRowDist.get(tempMaxLossRow);
+                    prevNumber++;
+                    maxLossInRowDist.put(tempMaxLossRow, prevNumber);
+                } else {
+                    maxLossInRowDist.put(tempMaxLossRow, 1);
+                }
+
+                tempMaxLossRow = 0;
+            }
+        }
+        //System.out.println(filterName + " P&L with ()");
+        //System.out.println(filterName + " Win: " + tempWin + ", Loss: " + tempLoss);
+        //System.out.println(filterName + " Max loss in a row: " + maxLossRow + " end at: " + winLossInputIndex.get(maxLossRowPoint));
+
+        for(Integer key: maxLossInRowDist.keySet()) {
+            if(key > 0) {
+                //System.out.println(key + " :" + maxLossInRowDist.get(key));
+            }
+
+        }
+        //System.out.println("----------------------------------------");
+        //System.out.println("\n");
+
+
+
+
     }
 }

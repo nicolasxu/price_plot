@@ -29,6 +29,8 @@ public class NoLagMaFilterTest extends AlStepFilterTest{
             // pctFilter 15, length 30 yields good result
             ArrayList<Double> tempInput = new ArrayList<Double>();
             ArrayList<Double> tempOutput = new ArrayList<Double>();
+            //NoLagMaFilter tempFilter = new NoLagMaFilter(30, 20);
+            //NoLagMaFilter tempFilter = new NoLagMaFilter(50, 40);
             NoLagMaFilter tempFilter = new NoLagMaFilter(30, 20);
 
             this.readDataFileTo(fileName, tempInput);
