@@ -47,7 +47,9 @@ public class NoFilterTest extends AlStepFilterTest {
             tempFilter.filter(tempInput, tempOutput);
             System.out.println("====== " +fileName+ " =======");
             //tempFilter.calculateWinLoss(tempInput, tempOutput, tempFilter.buySellSignal);
-            tempFilter.calculate3(tempInput, tempOutput, tempFilter.buySellSignal);
+            //tempFilter.calculate3(tempInput, tempOutput, tempFilter.buySellSignal);
+            Util.calculateCapStrategy(tempInput, tempOutput, tempFilter.buySellSignal, "no filter");
+            //Util.calculateWinLoss(tempInput, tempOutput, tempFilter.buySellSignal, "no filter");
 
 
 

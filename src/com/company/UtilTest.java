@@ -14,6 +14,8 @@ public class UtilTest {
     @Before
     public void setUp() throws Exception {
 
+
+
     }
 
     @After
@@ -47,4 +49,12 @@ public class UtilTest {
     }
 
 
+    @Test
+    public void testFindTickPattern() throws Exception {
+        System.out.println("testing FindTickPattern...");
+        ArrayList<Double> data = new ArrayList<Double>();
+
+        Util.readCSVFileTo("ticks2015.08.26.csv", data);
+
+    }
 }

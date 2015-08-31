@@ -31,13 +31,14 @@ public class NoLagMaFilterTest extends AlStepFilterTest{
             ArrayList<Double> tempOutput = new ArrayList<Double>();
             //NoLagMaFilter tempFilter = new NoLagMaFilter(30, 20);
             //NoLagMaFilter tempFilter = new NoLagMaFilter(50, 40);
-            NoLagMaFilter tempFilter = new NoLagMaFilter(30, 20);
+            NoLagMaFilter tempFilter = new NoLagMaFilter(60, 40);
 
             this.readDataFileTo(fileName, tempInput);
 
             tempFilter.filter(tempInput, tempOutput);
             System.out.println("====== " + fileName + " =======");
-            Util.calculateWinLoss(tempInput, tempOutput, tempFilter.buySellSignal, "No Lag MA Filter");
+            //Util.calculateWinLoss(tempInput, tempOutput, tempFilter.buySellSignal, "No Lag MA Filter");
+            Util.calculateCapStrategy(tempInput, tempOutput, tempFilter.buySellSignal, "No Lag MA Filter");
             //Util.calculateBuyHold(tempInput, tempOutput, tempFilter.buySellSignal, "No Lag MA Filter");
 
         }

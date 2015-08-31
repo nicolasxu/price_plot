@@ -19,9 +19,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -42,6 +39,7 @@ public class SampleForm extends ApplicationFrame {
     AlStepFilter alStepFilter;
     FirFilter firFilter;
     NoLagMaFilter noLagMaFilter;
+    SATL satlFilter;
 
     public SampleForm() {
 
@@ -84,55 +82,14 @@ public class SampleForm extends ApplicationFrame {
         setVisible(true);
     }
 
-    private void readDataFileTo(ArrayList<Double> data) {
-        this.fileName = "tick50diff201309.csv"; //"tick50diff.csv";
-        String filePath = "/Users/nick/IdeaProjects/price_plot/";
-
-        FileReader fr;
-        BufferedReader br;
-        String line = null;
-
-        try {
-            fr = new FileReader(filePath + fileName);
-            br = new BufferedReader(fr);
-            while((line = br.readLine()) != null) {
-
-
-                String[] columns = line.split(",");
-                double bid, ask, mid;
-
-                if(this.fileName.contains("IB")) {
-                    bid = Double.parseDouble(columns[1]);
-                    ask = Double.parseDouble(columns[2]);
-                    mid = (bid + ask) / 2;
-                } else {
-                    bid = Double.parseDouble(columns[0]);
-                    ask = Double.parseDouble(columns[1]);
-                    mid = (bid + ask) / 2;
-                }
-
-
-                if(data == null) {
-                    data = new ArrayList<Double>();
-                }
-                data.add(mid);
-
-                //System.out.println("bid:" + bid + " ask: " + ask);
-
-            }
-            br.close();
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
     private XYDataset createDataCollection() {
 
         // read data
         ArrayList<Double>  data = new ArrayList<Double>();
-        this.readDataFileTo(data);
+        Util.readCSVFileTo("ticks2015.08.26.csv", data);
+
+        // find pattern in ticks
+        Util.findTickPattern(data, 9);
 
         // series
         XYSeries priceSeries = new XYSeries("Price");
@@ -152,7 +109,7 @@ public class SampleForm extends ApplicationFrame {
 
         // SATL filter
         ArrayList<Double> satlData = new ArrayList<Double>();
-        SATL satlFilter = new SATL();
+        satlFilter = new SATL();
         satlFilter.filter(data, satlData);
         //satlFilter.calculateWinLoss(data, satlData, satlFilter.buySellSignal);
 
@@ -185,14 +142,14 @@ public class SampleForm extends ApplicationFrame {
 
         // Kalman Filter
         ArrayList<Double> kalmanData = new ArrayList<Double>();
-        kFilter = new KalmanFilter(60); // 5, 10
+        kFilter = new KalmanFilter(50); // 5, 10
         kFilter.filter(fatlData2, kalmanData);
         //kFilter.calculateWinLoss(data, kalmanData, kFilter.buySellSignal);
         //System.out.println("input size: " + data.size() + " output size: " + kalmanData.size() + " signal size: " + kFilter.buySellSignal.size());
 
         // Laguerre Filter
         ArrayList<Double> laguerreData = new ArrayList<Double>();
-        laguerreFilter = new ALF_2(2); // 10
+        laguerreFilter = new ALF_2(40); // 10
         laguerreFilter.filter(smoothedData, laguerreData);
         //laguerreFilter.calculateWinLoss(data, laguerreData, laguerreFilter.buySellSignal);
 
@@ -206,8 +163,10 @@ public class SampleForm extends ApplicationFrame {
         ArrayList<Double> noFilterData = new ArrayList<Double>();
         noFilter = new NoFilter();
         noFilter.filter(data, noFilterData);
-        noFilter.calculateWinLoss(data, noFilterData, noFilter.buySellSignal);
-        noFilter.calculate3(data, noFilterData, noFilter.buySellSignal);
+        //Util.calculateWinLoss(data, noFilterData, noFilter.buySellSignal, "no filter");
+        //Util.calculateCapStrategy(data, noFilterData, noFilter.buySellSignal, "no filter");
+        //Util.calculateContinuousSignalDistribution(data, noFilterData, noFilter.buySellSignal, "no filter");
+
 
         // FatlStepFilter
         ArrayList<Double> fatl2StepOutput = new ArrayList<Double>();
@@ -218,7 +177,7 @@ public class SampleForm extends ApplicationFrame {
 
         // StepFilter
         ArrayList<Double> stepOutput = new ArrayList<Double>();
-        stepFilter = new StepFilter(60);
+        stepFilter = new StepFilter(30);
         stepFilter.filter(data, stepOutput);
         //stepFilter.calculateWinLoss(data, stepOutput, stepFilter.buySellSignal);
 
@@ -229,16 +188,17 @@ public class SampleForm extends ApplicationFrame {
 
         // fir filter
         ArrayList<Double> firOutput = new ArrayList<Double>();
-        firFilter = new FirFilter(20);
+        firFilter = new FirFilter(500);
         firFilter.filter(data, firOutput);
         //firFilter.calculateWinLoss(data, firOutput, firFilter.buySellSignal);
         //Util.calculateWinLoss(data, firOutput, firFilter.buySellSignal, "FIR Filter");
 
         // No Lag Moving Average Filter
         ArrayList<Double> noLagMaOutput = new ArrayList<Double>();
-        noLagMaFilter = new NoLagMaFilter(20, 15); // length, pointFilter
+        noLagMaFilter = new NoLagMaFilter(300, 50); // length, pointFilter
         noLagMaFilter.filter(data, noLagMaOutput);
-        Util.calculateWinLoss(data, noLagMaOutput, noLagMaFilter.buySellSignal, "No Lag MA Filter" );
+        //Util.calculateWinLoss(data, noLagMaOutput, noLagMaFilter.buySellSignal, "No Lag MA Filter");
+        //Util.calculateCapStrategy(data, noLagMaOutput, noLagMaFilter.buySellSignal, "No Lag MA Filter");
 
         // prepare series data for all filter series
         for(int i = 0; i < data.size(); i++) {
@@ -275,7 +235,7 @@ public class SampleForm extends ApplicationFrame {
         //dataCollection.addSeries(noFilterSeries);
         //dataCollection.addSeries(alStepSeries);
         //dataCollection.addSeries(firSeries);
-        dataCollection.addSeries(noLagSeries);
+        //dataCollection.addSeries(noLagSeries);
 
         return dataCollection;
     }
@@ -319,8 +279,8 @@ public class SampleForm extends ApplicationFrame {
 //                    }
 
                     // use laguerre signal
-                    if(item <  noLagMaFilter.buySellSignal.size()) {
-                        isBuy = noLagMaFilter.buySellSignal.get(item);
+                    if(item <  satlFilter.buySellSignal.size()) {
+                        isBuy = satlFilter.buySellSignal.get(item);
                     }
 
                     if(isBuy == 1) {
