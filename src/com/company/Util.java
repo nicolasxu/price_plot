@@ -334,13 +334,19 @@ public class Util {
 
     }
 
-    static public void findTickPattern(ArrayList<Double> inputTicks, int targetCount){
+    static public void findTickPatternSignal(ArrayList<Double> inputTicks, int targetCount, ArrayList<TickSignal> signals){
+        if (signals == null) {
+            System.out.println("signals object is empty");
+            return;
+        }
+
         // find continus x > x + 1, or x < x + 1 pattern for count in a row.
         System.out.println("Finding patterns in "+ inputTicks.size() +" ticks...");
         double prevousValue = 0;
         int directionCounter = 0;
         int previousDirection = 0; // -1: below, 1: above, 0: initial value
         int hitCounter = 0; // times that meets criteria
+        int previousHitTickIndex = 0;
 
         for(int tickIndex = 0; tickIndex < inputTicks.size(); tickIndex++ ) {
 
@@ -367,15 +373,502 @@ public class Util {
             }
 
             if(directionCounter >= targetCount) {
-                System.out.println("more than "+ targetCount + " at index: "+ tickIndex);
-                hitCounter++;
+                // filter out the consecutive hits
+                if(tickIndex != previousHitTickIndex + 1 ) {
+                    // hit
+                    hitCounter++;
+                    System.out.println("more than "+ targetCount + " at index: "+ tickIndex + " " + previousDirection);
+                    signals.add(new TickSignal(tickIndex, previousDirection));
+
+                    previousHitTickIndex = tickIndex;
+                    directionCounter = 0;
+                }
+
+
             }
 
             prevousValue = currentValue;
         }
 
+        System.out.println("total hit: " +hitCounter + "\n");
         System.out.println("Finding pattern done!");
-        System.out.println("Result: " +hitCounter+ " hits");
+
+    }
+
+    static public void runSim(ArrayList<Double> inputTicks, ArrayList<TickSignal> signals){
+
+        ArrayList<SimOrder> orders = new ArrayList<SimOrder>();
+        double totalProfit = 0;
+        double point = 0.00001;
+        double tpPoints = 80 * point;
+        double slPoints = 30  * point;
+        int volume = 10000;
+
+        for(int tickIndex = 0; tickIndex < inputTicks.size(); tickIndex++) {
+
+            // 1. process signals at each tick
+            for(int signalIndex = 0; signalIndex < signals.size(); signalIndex++) {
+
+                TickSignal thisSignal = signals.get(signalIndex);
+                if(tickIndex == thisSignal.tickIndex) {
+                    // time to create buy or sell order
+                    if(thisSignal.signal == 1) {
+                        // buy
+                        double currentPrice = inputTicks.get(tickIndex);
+                        SimOrder buyOrder = new SimOrder();
+                        // open(int flag, double tp, double sl, double openPrice, int volume)
+                        buyOrder.open(1, tpPoints > 0? currentPrice + tpPoints: 0 ,
+                                slPoints > 0? currentPrice - slPoints: 0,
+                                currentPrice,
+                                volume);
+                        orders.add(buyOrder);
+                    }
+
+                    if(thisSignal.signal == -1) {
+                        // sell
+                        double currentPrice = inputTicks.get(tickIndex);
+                        SimOrder sellOrder = new SimOrder();
+                        // open(int flag, double tp, double sl, double openPrice, int volume)
+                        sellOrder.open(-1, tpPoints>0? currentPrice - tpPoints:0,
+                                slPoints > 0? currentPrice + slPoints:0,
+                                currentPrice,
+                                volume);
+                        orders.add(sellOrder);
+                    }
+
+                }
+            }
+
+            // 2. process opened order at each tick
+            for(int orderIndex = 0; orderIndex < orders.size(); orderIndex++ ) {
+                SimOrder currentOrder = orders.get(orderIndex);
+                double currentTickPrice = inputTicks.get(tickIndex);
+                double profit = currentOrder.trySLandTP(currentTickPrice);
+                totalProfit = totalProfit + profit;
+            }
+
+        }
+
+        // 3. process un-closed orders
+        int unclosedOrderCount = 0;
+        double lastPrice = inputTicks.get(inputTicks.size() -1);
+        for(int orderIndex = 0; orderIndex < orders.size(); orderIndex++) {
+            SimOrder currentOrder = orders.get(orderIndex);
+            if(currentOrder.closePrice == 0) {
+                unclosedOrderCount++;
+                double thisProfit = currentOrder.close(lastPrice);
+                totalProfit = totalProfit + thisProfit;
+            }
+        }
+        System.out.println("Unclosed order count: " + unclosedOrderCount);
+
+        System.out.println("Total sim profit is: " + totalProfit);
+
+    }
+
+    /* Convert raw tick to step ticks */
+    static public void tickToStep(ArrayList<Double> inputTicks, double stepPoints, ArrayList<Double> stepTicks) {
+        // points example: 50 * 0.00001
+        // one point is: 0.00001
+
+        for(int tickIndex = 0; tickIndex < inputTicks.size(); tickIndex++) {
+            if(tickIndex > 0) {
+                if(Math.abs( inputTicks.get(tickIndex) - stepTicks.get(stepTicks.size() -1)) >= stepPoints) {
+                    stepTicks.add(inputTicks.get(tickIndex));
+                }
+            } else {
+                stepTicks.add(inputTicks.get(0));
+            }
+        }
+    }
+
+    /*
+     *  1. take step ticks
+     *  2. buy/sell only at turn, e.g: -1 to 1, or 1 to -1
+     *  3. tp or sl may set
+     * */
+    static public void runSimForStepTicks(ArrayList<Double> stepTicks, ArrayList<Integer> signals) {
+        // -1 sell, 1 buy, 0 neutral
+
+        int previousSignal = 0;
+        int currentSignal = 0;
+        double point = 0.00001;
+        double tpPoints = 50 * point;
+        double slPoints = 150  * point;
+        int originalVolume = 100000; // 100k
+        int volume = 100000; // 100k
+        double totalProfit = 0;
+        ArrayList<SimOrder> orders = new ArrayList<SimOrder>();
+
+        if(stepTicks.size() != signals.size()) {
+            System.out.println("stepTicks.size(): " + stepTicks.size() + " signals.size(): " + signals.size());
+            System.out.println("error: signal count doesn't equal tick count");
+            return;
+        }
+
+        for(int tickIndex = 0; tickIndex < stepTicks.size(); tickIndex++) {
+
+            // 1. process signal
+            if (tickIndex == 0) {
+                // 1st tick
+                previousSignal = signals.get(tickIndex);
+                currentSignal = previousSignal;
+
+            } else {
+                // 2nd and on
+                currentSignal = signals.get(tickIndex);
+
+
+                if(previousSignal == -1 && currentSignal == 1) {
+                    // buy
+                    double currentPrice = stepTicks.get(tickIndex);
+                    SimOrder buyOrder = new SimOrder();
+
+                    buyOrder.open(1, tpPoints > 0? currentPrice + tpPoints: 0 ,
+                            slPoints > 0? currentPrice - slPoints: 0,
+                            currentPrice,
+                            volume);
+                    orders.add(buyOrder);
+                    volume = originalVolume;
+                    System.out.println(tickIndex + ": buy");
+
+
+
+                }
+
+                if(previousSignal == 1 && currentSignal == -1) {
+                    // sell
+
+                    double currentPrice = stepTicks.get(tickIndex);
+                    SimOrder sellOrder = new SimOrder();
+                    // open(int flag, double tp, double sl, double openPrice, int volume)
+                    sellOrder.open(-1, tpPoints>0? currentPrice - tpPoints:0,
+                            slPoints > 0? currentPrice + slPoints:0,
+                            currentPrice,
+                            volume);
+                    orders.add(sellOrder);
+                    volume = originalVolume;
+                    System.out.println(tickIndex + ": sell");
+
+
+                }
+
+                // end
+                previousSignal = currentSignal;
+            }
+
+            // 2. process open order
+
+            for(int orderIndex = 0; orderIndex < orders.size(); orderIndex++ ) {
+                SimOrder currentOrder = orders.get(orderIndex);
+                double currentTickPrice = stepTicks.get(tickIndex);
+                double profit = currentOrder.trySLandTP(currentTickPrice);
+                totalProfit = totalProfit + profit;
+
+                // 2.1 adjust next order position if loss
+                if(profit < 0) {
+                    volume = volume * 3;
+                }
+            }
+
+        }
+
+        // 3. process un-closed order
+        int profitOrderCount = 0;
+        int lossOrderCount = 0;
+        int unclosedOrderCount = 0;
+        double lastPrice = stepTicks.get(stepTicks.size() -1);
+        for(int orderIndex = 0; orderIndex < orders.size(); orderIndex++) {
+            SimOrder currentOrder = orders.get(orderIndex);
+            if(currentOrder.closePrice == 0) {
+                unclosedOrderCount++;
+                double thisProfit = currentOrder.close(lastPrice);
+                totalProfit = totalProfit + thisProfit;
+            }
+
+            if(currentOrder.pl > 0){
+                profitOrderCount++;
+            } else {
+                lossOrderCount++;
+            }
+        }
+        System.out.println("Unclosed order count: " + unclosedOrderCount);
+        System.out.println("profit order count: " + profitOrderCount);
+        System.out.println("loss order count: " + lossOrderCount);
+        System.out.println("Total sim profit is: " + totalProfit);
+
+
+    }
+
+    static public void compressStepData(ArrayList<Double> input, ArrayList<Double> output) {
+
+        double currentPrice = 0;
+        double pm1Price = 0;
+        double pm2Price = 0;
+        int lastBuyIndex     = 0;
+        int lastSellIndex    = 0;
+        double lastBuyPrice  = 0;
+        double lastSellPrice = 0;
+
+        int rangeEndIndex    = 0;
+
+
+
+        for(int inputIndex = 0; inputIndex < input.size(); inputIndex++) {
+
+
+
+
+            if(inputIndex <= 1) {
+                // 0, 1 index
+                currentPrice = input.get(inputIndex);
+                pm1Price = input.get(Math.max(0, inputIndex -1));
+                pm2Price = input.get(Math.max(0, inputIndex -2));
+                output.add(currentPrice);
+            } else {
+                // 2 and on...
+                currentPrice = input.get(inputIndex);
+                pm1Price     = input.get(inputIndex - 1);
+                pm2Price     = input.get(inputIndex - 2);
+
+                output.add(currentPrice);
+
+                if(Math.abs(lastBuyIndex - lastSellIndex) == 1) {
+                    //System.out.println("range formed at index: " + lastSellIndex);
+                   // range established
+                    double max = lastBuyPrice;
+                    double min = lastSellPrice;
+
+                    if(rangeEndIndex == 0) {
+                        rangeEndIndex = inputIndex - 1;
+                    }
+
+                    if (Math.abs(currentPrice - max) <= 15 * 0.00001 ||
+                            Math.abs(currentPrice - min) <= 15 * 0.00001) {
+                        //System.out.println("within range");
+                        // still within range established before
+                        output.remove(output.size() -1);
+                        // remove last added, since it is still within range
+
+                        // roll back by one tick
+                        currentPrice = input.get(rangeEndIndex );
+                        pm1Price     = input.get(rangeEndIndex - 1);
+                        pm2Price     = input.get(rangeEndIndex - 2);
+
+
+                    } else {
+                        // price moving out of range, reset range end index
+                        rangeEndIndex = 0;
+                    }
+
+                }
+
+                if(currentPrice > pm1Price && pm2Price > pm1Price) {
+                    // buy
+                    lastBuyIndex = inputIndex;
+                    lastBuyPrice = currentPrice;
+
+                }
+
+                if(currentPrice < pm1Price && pm2Price < pm1Price) {
+                    // sell
+                    lastSellIndex = inputIndex;
+                    lastSellPrice = currentPrice;
+                }
+
+                //System.out.println("lastBuyIndex: " + lastBuyIndex + " lastSellIndex: " + lastSellIndex);
+
+
+                pm1Price = currentPrice;
+            }
+
+        }
+
+    }
+
+    static public void runSim3(ArrayList<Double> stepTicks, ArrayList<Integer> signals) {
+        // variable position size based on prev p&l
+        // 1, -1 sell
+        // -1, 1 buy
+        // X, 0 close position
+        // no stop loss
+        if(stepTicks.size() != signals.size()) {
+            System.out.println("signal size doesn't match input tick size");
+            return;
+        }
+
+        double takeProfitPoints = 100 * 0.00001;
+        double stopLossPoint = 0 * 0.00001;
+        int originalVolume = 100000; // 10k
+        int currentVolume = originalVolume;
+        int maxVolume = originalVolume * 10; // 10 times original volume
+
+        int currentSignal  = 0;
+        int previousSignal = 0;
+        double totalProfit = 0;
+        double thisProfit = 0;
+        int buyFlag = 1;
+        int sellFlag = -1;
+        int lossVolumeToAmortize = 0;
+
+        ArrayList<SimOrder> orders = new ArrayList<SimOrder>();
+        double currentPrice = 0;
+
+        for(int tickIndex = 0; tickIndex < stepTicks.size(); tickIndex++ ) {
+
+            if (tickIndex < 1) {
+                // index 0
+                currentSignal = signals.get(tickIndex);
+                previousSignal = currentSignal;
+                currentPrice = stepTicks.get(tickIndex);
+            } else {
+                // index 1 and on
+                currentSignal = signals.get(tickIndex);
+                previousSignal = signals.get(tickIndex - 1);
+                currentPrice = stepTicks.get(tickIndex);
+
+                if (currentSignal == 1 && previousSignal == 1) {
+
+                    for(int orderIndex = 0; orderIndex < orders.size(); orderIndex++) {
+                        SimOrder order = orders.get(orderIndex);
+                        order.trySLandTP(currentPrice);
+
+                    }
+                }
+
+                if(currentSignal == -1 && previousSignal == -1) {
+                    for(int orderIndex = 0; orderIndex < orders.size(); orderIndex++) {
+                        SimOrder order = orders.get(orderIndex);
+                        order.trySLandTP(currentPrice);
+
+                    }
+                }
+
+                if(currentSignal == 1 && previousSignal == -1) {
+                    // reverse
+
+                    // close previous order
+                    for(int orderIndex = 0; orderIndex < orders.size(); orderIndex++) {
+                        SimOrder order = orders.get(orderIndex);
+                        order.close(currentPrice);
+                    }
+
+                    // set next volume based on previous order p&l
+                    if(orders.size() > 0) {
+                        SimOrder lastOrder = orders.get(orders.size() -1);
+                        if(lastOrder.pl < 0) {
+                            // loss
+                            // update lossVolumeToAmortize
+                            lossVolumeToAmortize =(int)(lossVolumeToAmortize + (-lastOrder.pl) / takeProfitPoints);
+
+                        }
+
+                        // calculate next volume size
+                        if(lossVolumeToAmortize > 0) {
+                            if (lossVolumeToAmortize + originalVolume < maxVolume) {
+                                currentVolume = lossVolumeToAmortize + originalVolume;
+                                lossVolumeToAmortize = 0;
+                            } else {
+                                currentVolume = maxVolume;
+                                lossVolumeToAmortize = lossVolumeToAmortize - maxVolume;
+                                lossVolumeToAmortize = lossVolumeToAmortize + originalVolume;
+                            }
+                        } else {
+                            currentVolume = originalVolume;
+                        }
+
+                    }
+
+                    // open new buy order
+                    SimOrder buyOrder = new SimOrder();
+                    buyOrder.open(buyFlag,
+                            takeProfitPoints > 0? currentPrice + takeProfitPoints: 0,
+                            stopLossPoint > 0? currentPrice - stopLossPoint: 0,
+                            currentPrice,
+                            currentVolume);
+
+                    orders.add(buyOrder);
+                    System.out.println("buy at " + tickIndex);
+
+                }
+
+                if(currentSignal == -1 && previousSignal == 1) {
+                    // reverse
+                    // close previous order
+                    for(int orderIndex = 0; orderIndex < orders.size(); orderIndex++) {
+                        SimOrder order = orders.get(orderIndex);
+                        order.close(currentPrice);
+                    }
+
+                    // set next volume based on previous order p&l
+                    if(orders.size() > 0) {
+                        SimOrder lastOrder = orders.get(orders.size() -1);
+                        if(lastOrder.pl < 0) {
+                            // loss
+                            // update lossVolumeToAmortize
+                            lossVolumeToAmortize =(int)(lossVolumeToAmortize + (-lastOrder.pl) / takeProfitPoints);
+
+                        }
+
+                        // calculate next volume size
+                        if(lossVolumeToAmortize > 0) {
+                            if (lossVolumeToAmortize + originalVolume < maxVolume) {
+                                currentVolume = lossVolumeToAmortize + originalVolume;
+                                lossVolumeToAmortize = 0;
+                            } else {
+                                currentVolume = maxVolume;
+                                lossVolumeToAmortize = lossVolumeToAmortize - maxVolume;
+                                lossVolumeToAmortize = lossVolumeToAmortize + originalVolume;
+                            }
+                        } else {
+                            currentVolume = originalVolume;
+                        }
+
+                    }
+
+                    // open new sell order
+                    SimOrder sellOrder = new SimOrder();
+                    sellOrder.open(sellFlag,
+                            takeProfitPoints > 0 ? currentPrice - takeProfitPoints : 0,
+                            stopLossPoint > 0 ? currentPrice + stopLossPoint : 0,
+                            currentPrice,
+                            currentVolume);
+
+                    orders.add(sellOrder);
+                    System.out.println("sell at " + tickIndex);
+
+
+                }
+
+                if(currentSignal == 0) {
+                    // enter to slow changing
+                    // close all orders
+                    for(int orderIndex = 0; orderIndex < orders.size(); orderIndex++) {
+                        SimOrder order = orders.get(orderIndex);
+                        order.close(currentPrice);
+                    }
+                }
+
+
+
+
+
+            }
+
+
+        }
+
+        for(int orderIndex = 0; orderIndex < orders.size(); orderIndex++) {
+            SimOrder order = orders.get(orderIndex);
+            order.close(currentPrice);
+            totalProfit = totalProfit + order.pl;
+        }
+
+        System.out.println("Total profit is: " + totalProfit);
+
+
+
+
 
     }
 }

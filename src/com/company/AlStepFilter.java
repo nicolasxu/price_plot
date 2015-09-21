@@ -138,7 +138,7 @@ public class AlStepFilter extends IFilter {
                     if(soldPrice - currentPrice >= profitSize) {
                         winCount++;
                         winLossList.add(1);
-                        winLossInputIndex.add(1);
+                        winLossInputIndex.add(i);
                         sold = false;
 
                     }

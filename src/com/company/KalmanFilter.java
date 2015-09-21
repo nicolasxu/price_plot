@@ -59,10 +59,10 @@ public class KalmanFilter extends IFilter {
         DecimalFormat df = new DecimalFormat("#.########");
         df.setRoundingMode(RoundingMode.HALF_UP);
 
-        for(int i = Math.max(0, output.size() -1 ); i < input.size(); i++) {
+        for(int inputIndex = Math.max(0, output.size() -1 ); inputIndex < input.size(); inputIndex++) {
 
-            if(i < 1) {
-                Double inputNumber = input.get(i);
+            if(inputIndex < 1) {
+                Double inputNumber = input.get(inputIndex);
                 output.add(inputNumber);
                 buySellSignal.add(-1);
                 this.previousVelocity = 0.0;
@@ -72,65 +72,85 @@ public class KalmanFilter extends IFilter {
                 this.velocity = this.previousVelocity;
 
                 // store the velocity before running at current bar
-                if(i == input.size() - 1) {
+                if(inputIndex == input.size() - 1) {
 
                     this.velocity = this.previousVelocity;
                 }
-                this.distance = input.get(i) - output.get(i - 1);
+                this.distance = input.get(inputIndex) - output.get(inputIndex - 1);
                 this.distance = Double.parseDouble(df.format(this.distance));
 
-                this.error    = output.get(i-1) + this.distance * this.sqrtK100;
+                this.error    = output.get(inputIndex-1) + this.distance * this.sqrtK100;
 
                 this.velocity = this.velocity + this.distance*this.k100;
-                this.previousVelocity = this.velocity;
 
                 double currentBarValue = this.error + this.velocity;
-                //currentBarValue = Double.parseDouble(df.format(currentBarValue));
 
-
-                if(i >= output.size()) {
+                // Part 1, writing output data
+                if(inputIndex >= output.size()) {
                     output.add(currentBarValue);
                 } else {
-                    output.set(i, currentBarValue);
+                    output.set(inputIndex, currentBarValue);
                 }
+
+                // Part 2, reset, if not pass filter point
+                double filterPoint = 22 * 0.00001;
+
+                if(Math.abs(output.get(inputIndex) -  output.get(inputIndex -1)) < filterPoint) {
+                    output.set(inputIndex, output.get(inputIndex - 1));
+                    // no update of the velocity
+                    //this.velocity = this.previousVelocity;
+
+                } else {
+                    // part 3, update velocity if pass the filterPoint threshold
+                    this.previousVelocity = this.velocity;
+                }
+
+
 
                 // calculating trend
                 if(this.signal == SignalMode.KALMAN) {
                     // Kalman signal
-                    if(this.velocity > 0) {
+                    buySellSignal.add(0);
+                    if(this.velocity > 1.5 * 0.00001) {
 
-                        if(i >= buySellSignal.size()) {
+                        if(inputIndex >= buySellSignal.size()) {
                             // buy
                             buySellSignal.add(1);
                         } else {
-                            buySellSignal.set(i, 1);
+
+                            buySellSignal.set(inputIndex, 1);
                         }
 
-                    } else {
+                    }
+                    if(this.velocity < -1.5 * 0.00001) {
 
-
-                        if(i >= buySellSignal.size()) {
+                        if(inputIndex >= buySellSignal.size()) {
                             // sell
-                            buySellSignal.add(0);
+                            buySellSignal.add(-1);
                         } else {
-                            buySellSignal.set(i, 0);
+                            buySellSignal.set(inputIndex, -1);
                         }
                     }
-                    //System.out.println("kalman signal["+i+"] = " + this.buySellSignal.get(i));
+
+                    if(inputIndex < 1240 && inputIndex > 1230) {
+                        //System.out.println("velocity: " + velocity);
+                        //System.out.println("inputIndex: " + inputIndex + " buySellSignal: " + buySellSignal.get(inputIndex));
+                    }
+
                 } else {
                     // Trend signal
-                    if(output.get(i -1 ) > output.get(i)) {
-                        if(i >= buySellSignal.size()) {
+                    if(output.get(inputIndex -1 ) > output.get(inputIndex)) {
+                        if(inputIndex >= buySellSignal.size()) {
                             buySellSignal.add(1);
                         } else {
-                            buySellSignal.set(i, 1);
+                            buySellSignal.set(inputIndex, 1);
                         }
 
                     } else {
-                        if(i >= buySellSignal.size()) {
-                            buySellSignal.add(0);
+                        if(inputIndex >= buySellSignal.size()) {
+                            buySellSignal.add(-1);
                         } else {
-                            buySellSignal.set(i, 0);
+                            buySellSignal.set(inputIndex, -1);
                         }
                     }
                 }
@@ -148,9 +168,11 @@ public class KalmanFilter extends IFilter {
         double soldPrice = 0.0;
         int winCount = 0;
         int lossCount = 0;
-        double profitSize = 50 * 0.00001; // 50 points
+        double profitSize   = 100 * 0.00001;  // 00 points
+        double stopLossSize = 100 * 0.00001; // 100 points
 
-        ArrayList<Integer> winLossList = new ArrayList<Integer>();
+        ArrayList<Integer> winLossList = new ArrayList<Integer>(); // 0 is loss, 1 is win
+        ArrayList<Integer> winLossInputIndex = new ArrayList<Integer>();
 
 
         for(int i = 0; i < total; i++) {
@@ -163,24 +185,33 @@ public class KalmanFilter extends IFilter {
             }
 
             // trend reverse
-            if(currentSignal == 1 && previousSignal == 0) {
+            if(currentSignal == 1 && previousSignal == -1) {
                 if(sold) {
                     sold = false;
                     lossCount++;
                     winLossList.add(0);
+                    winLossInputIndex.add(i);
+                    System.out.println("loss: " + (soldPrice - input.get(i)));
+
                 }
                 bought = true;
                 boughtPrice = input.get(i);
+
+                System.out.println(i + ": buy");
             }
 
-            if(currentSignal == 0 && previousSignal == 1) {
+            if(currentSignal == -1 && previousSignal == 1) {
                 if(bought) {
                     bought = false;
                     lossCount++;
                     winLossList.add(0);
+                    winLossInputIndex.add(i);
+                    System.out.println("loss: " + (input.get(i) - boughtPrice));
                 }
                 sold = true;
                 soldPrice = input.get(i);
+                System.out.println(i + ": sell");
+
             }
 
             // trend continue
@@ -191,19 +222,21 @@ public class KalmanFilter extends IFilter {
                     if (currentPrice - boughtPrice >= profitSize) {
                         winCount++;
                         winLossList.add(1);
+                        winLossInputIndex.add(i);
                         bought = false;
                     }
                 }
 
             }
 
-            if(currentSignal == 0 && previousSignal == 0) {
+            if(currentSignal == -1 && previousSignal == -1) {
                 // sell trend continue
                 double currentPrice = input.get(i);
                 if(sold) {
                     if(soldPrice - currentPrice >= profitSize) {
                         winCount++;
                         winLossList.add(1);
+                        winLossInputIndex.add(i);
                         sold = false;
 
                     }
@@ -231,7 +264,8 @@ public class KalmanFilter extends IFilter {
             }
         }
         System.out.println("tempwins: " + tempWin + " tempLoss: " + tempLoss);
-        System.out.println("Max loss in a row: " + maxLossRow + " ends at: " + maxLossRowPoint);
+        System.out.println("Max loss in a row: " + maxLossRow + " ends at: " + winLossInputIndex.get(maxLossRowPoint) );
+
 
     }
 }

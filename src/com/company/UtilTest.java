@@ -52,9 +52,38 @@ public class UtilTest {
     @Test
     public void testFindTickPattern() throws Exception {
         System.out.println("testing FindTickPattern...");
-        ArrayList<Double> data = new ArrayList<Double>();
+        ArrayList<Double> ticks = new ArrayList<Double>();
+        ArrayList<TickSignal> signals = new ArrayList<TickSignal>();
+        ArrayList<Double> stepTicks = new ArrayList<Double>();
 
-        Util.readCSVFileTo("ticks2015.08.26.csv", data);
+        // 1. read file to ticks
+        Util.readCSVFileTo("ticks2015.08.27.csv", ticks); // 26 ~ 28
+
+
+        // 2. generate signal
+        Util.findTickPatternSignal(ticks, 10, signals);
+        System.out.println("signal size: " + signals.size());
+
+        // 3. run sims
+        Util.runSim(ticks, signals);
+        System.out.println("end of test...");
+
+    }
+
+    @Test
+    public void testTickToStep() throws Exception {
+        System.out.println("testing testTickToStep()");
+
+        ArrayList<Double> stepData = new ArrayList<Double>();
+        ArrayList<Double> filterOutput = new ArrayList<Double>();
+        String fileName = "tick50diff201411.csv";
+        Util.readCSVFileTo(fileName, stepData);
+        System.out.println("period: " + fileName);
+
+        KalmanFilter kFilter = new KalmanFilter(5);
+        kFilter.filter(stepData, filterOutput);
+
+        Util.runSimForStepTicks(stepData, kFilter.buySellSignal);
 
     }
 }

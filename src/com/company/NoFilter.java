@@ -24,7 +24,7 @@ public class NoFilter extends IFilter {
             output.add(input.get(index));
 
             if(index ==0) {
-                this.buySellSignal.add(-1);
+                this.buySellSignal.add(0);
             } else {
                 // 2nd and on...
 
@@ -34,7 +34,7 @@ public class NoFilter extends IFilter {
                     this.buySellSignal.set(index, 1);
                 }
                 if (output.get(index) <  output.get(index -1)) {
-                    this.buySellSignal.set(index, 0);
+                    this.buySellSignal.set(index, -1);
                 }
 
             }

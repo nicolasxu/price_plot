@@ -1,6 +1,5 @@
 package com.company;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -15,7 +14,7 @@ public class FisherFilter extends IFilter{
 
     public void filter(ArrayList<Double> input, ArrayList<Double> outputFisher,
                        ArrayList<Double> outputTrigger) {
-
+        System.out.println("FisherFilter.filter() triggered");
         for(int index = Math.max(0, outputFisher.size() - 1); index < input.size(); index ++) {
 
             if ( index < this.period) {

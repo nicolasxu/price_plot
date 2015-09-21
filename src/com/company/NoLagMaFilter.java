@@ -90,7 +90,7 @@ public class NoLagMaFilter extends IFilter {
 
                 output.add(input.get(index));
 
-                this.buySellSignal.add(-1);
+                this.buySellSignal.add(0);
 
             } else {
                 //index >= this.Len
@@ -154,7 +154,7 @@ public class NoLagMaFilter extends IFilter {
                     this.buySellSignal.set(index, 1); // buy signal
                 }
                 if(output.get(index) < output.get(index -1)) {
-                    this.buySellSignal.set(index, 0);  // sell signal
+                    this.buySellSignal.set(index, -1);  // sell signal
                 }
             }
         }
